@@ -12,6 +12,17 @@ services:
     volumes:
       - ./api:/app/api
   
+  client:
+    build: .
+    ports:
+      - 8080:8080
+    container_name: client
+    command: bash -c "go run client/client.go"
+    depends_on:
+      - server
+    volumes:
+      - ./api:/app/api
+  
   mysql:
     image: mysql:8.0
     ports:
