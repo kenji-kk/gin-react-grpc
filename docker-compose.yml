@@ -11,3 +11,17 @@ services:
       - mysql
     volumes:
       - ./api:/app/api
+  
+  mysql:
+    image: mysql:8.0
+    ports:
+      - 3306:3306
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: go_database
+      MYSQL_USER: go_grpc
+      MYSQL_PASSWORD: password
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./db/my.cnf:/etc/mysql/conf.d/my.conf
