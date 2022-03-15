@@ -36,3 +36,14 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     volumes:
       - ./db/my.cnf:/etc/mysql/conf.d/my.conf
+
+  frontend:
+    build: ./front
+    ports:
+      - 3000:3000
+    container_name: frontend
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./front/:/usr/src/app
+    command: sh -c 'cd /usr/src/app && yarn install && yarn start'
