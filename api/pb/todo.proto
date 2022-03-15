@@ -1,0 +1,15 @@
+syntax = "proto3";
+package api;
+option go_package = "./api/pb";
+
+service todo {
+  rpc Test(TestRequest) returns (TestResponse) {}
+}
+
+message TestRequest {
+  string Req = 1;
+}
+
+message TestResponse {
+  string Res = 1;
+}
