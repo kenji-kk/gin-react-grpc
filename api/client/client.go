@@ -3,6 +3,8 @@ package main
 import (
 	"time"
 
+	"todo/client/handler"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -46,5 +48,7 @@ func main() {
             "message": "pong",
         })
     })
+		r.POST("/signup", handler.Signup)
+  	r.POST("/signin", handler.Signin)
     r.Run()
 }

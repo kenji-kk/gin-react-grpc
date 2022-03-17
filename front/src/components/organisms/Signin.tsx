@@ -1,4 +1,6 @@
-import * as React from 'react';
+import { useState }from 'react';
+import axios from 'axios';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -20,13 +22,17 @@ interface PROPS {
 const theme = createTheme();
 
 export const SignIn: React.VFC<PROPS> = ({setFormToggle}) => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    axios
+    .post('http://localhost:8080/signin',
+    {Email: email, Password: password},
+    { headers: {'Content-Type': 'application/json'}, responseType: 'json' }
+    )
+    .then(response => console.log('response body:', response.data));
   };
 
   return (
@@ -57,6 +63,8 @@ export const SignIn: React.VFC<PROPS> = ({setFormToggle}) => {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -67,6 +75,8 @@ export const SignIn: React.VFC<PROPS> = ({setFormToggle}) => {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Button
               type="submit"

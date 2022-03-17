@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,6 +13,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import axios from 'axios';
+
 interface PROPS {
   setFormToggle:any;
 }
@@ -20,13 +22,18 @@ interface PROPS {
 const theme = createTheme();
 
 export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    axios
+    .post('http://localhost:8080/signup',
+    {Username: name, Email: email, Password: password},
+    { headers: {'Content-Type': 'application/json'}, responseType: 'json' }
+    )
+    .then(response => console.log('response body:', response.data));
   };
 
   return (
@@ -58,6 +65,10 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
                   id="UserName"
                   label="ユーザ名"
                   autoFocus
+                  value={name}
+                  onChange={(event) => {
+                    setName(event.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -68,6 +79,10 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
                   label="メールアドレス"
                   name="email"
                   autoComplete="email"
+                  value={email}
+                  onChange={(event) => {
+                    setEmail(event.target.value);
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -79,6 +94,10 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={password}
+                  onChange={(event) => {
+                    setPassword(event.target.value);
+                  }}
                 />
               </Grid>
             </Grid>
@@ -87,7 +106,7 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-            >
+              >
               登録
             </Button>
             <Grid container justifyContent="flex-end">
