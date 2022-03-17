@@ -1,6 +1,7 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { AuthPage } from './components/pages/AuthPage';
 
 function App() {
   const [message, setMessage] = useState<string>()
@@ -16,9 +17,9 @@ function App() {
   }, [])
 
   return (
-    <div className="App">
-      <p>{message}</p>
-    </div>
+    <>
+      <AuthPage />
+    </>
   );
 }
 
