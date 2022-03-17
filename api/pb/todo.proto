@@ -2,14 +2,32 @@ syntax = "proto3";
 package api;
 option go_package = "./api/pb";
 
-service todo {
-  rpc Test(TestRequest) returns (TestResponse) {}
+service TodoService {
+  rpc AddUser(AddUserRequest) returns (AddUserResponse) {}
+  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse) {}
 }
 
-message TestRequest {
-  string Req = 1;
+message AddUserRequest {
+  string UserName = 1;
+  string Email = 2;
+  string Password = 3;
 }
 
-message TestResponse {
-  string Res = 1;
+message AddUserResponse {
+  string Id = 1;
+  string UserName = 2;
+  string Email = 3;
+  string Password = 4;
+}
+
+message LoginUserRequest {
+  string Email = 1;
+  string Password = 2;
+}
+
+message LoginUserResponse {
+  string Id = 1;
+  string UserName = 2;
+  string Email = 3;
+  string Password = 4;
 }

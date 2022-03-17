@@ -14,84 +14,120 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// TodoClient is the client API for Todo service.
+// TodoServiceClient is the client API for TodoService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type TodoClient interface {
-	Test(ctx context.Context, in *TestRequest, opts ...grpc.CallOption) (*TestResponse, error)
+type TodoServiceClient interface {
+	AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*AddUserResponse, error)
+	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error)
 }
 
-type todoClient struct {
+type todoServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewTodoClient(cc grpc.ClientConnInterface) TodoClient {
-	return &todoClient{cc}
+func NewTodoServiceClient(cc grpc.ClientConnInterface) TodoServiceClient {
+	return &todoServiceClient{cc}
 }
 
-func (c *todoClient) Test(ctx context.Context, in *TestRequest, opts ...grpc.CallOption) (*TestResponse, error) {
-	out := new(TestResponse)
-	err := c.cc.Invoke(ctx, "/api.todo/Test", in, out, opts...)
+func (c *todoServiceClient) AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*AddUserResponse, error) {
+	out := new(AddUserResponse)
+	err := c.cc.Invoke(ctx, "/api.TodoService/AddUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// TodoServer is the server API for Todo service.
-// All implementations should embed UnimplementedTodoServer
+func (c *todoServiceClient) LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error) {
+	out := new(LoginUserResponse)
+	err := c.cc.Invoke(ctx, "/api.TodoService/LoginUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// TodoServiceServer is the server API for TodoService service.
+// All implementations should embed UnimplementedTodoServiceServer
 // for forward compatibility
-type TodoServer interface {
-	Test(context.Context, *TestRequest) (*TestResponse, error)
+type TodoServiceServer interface {
+	AddUser(context.Context, *AddUserRequest) (*AddUserResponse, error)
+	LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error)
 }
 
-// UnimplementedTodoServer should be embedded to have forward compatible implementations.
-type UnimplementedTodoServer struct {
+// UnimplementedTodoServiceServer should be embedded to have forward compatible implementations.
+type UnimplementedTodoServiceServer struct {
 }
 
-func (UnimplementedTodoServer) Test(context.Context, *TestRequest) (*TestResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Test not implemented")
+func (UnimplementedTodoServiceServer) AddUser(context.Context, *AddUserRequest) (*AddUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddUser not implemented")
+}
+func (UnimplementedTodoServiceServer) LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
 }
 
-// UnsafeTodoServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to TodoServer will
+// UnsafeTodoServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to TodoServiceServer will
 // result in compilation errors.
-type UnsafeTodoServer interface {
-	mustEmbedUnimplementedTodoServer()
+type UnsafeTodoServiceServer interface {
+	mustEmbedUnimplementedTodoServiceServer()
 }
 
-func RegisterTodoServer(s grpc.ServiceRegistrar, srv TodoServer) {
-	s.RegisterService(&Todo_ServiceDesc, srv)
+func RegisterTodoServiceServer(s grpc.ServiceRegistrar, srv TodoServiceServer) {
+	s.RegisterService(&TodoService_ServiceDesc, srv)
 }
 
-func _Todo_Test_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TestRequest)
+func _TodoService_AddUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TodoServer).Test(ctx, in)
+		return srv.(TodoServiceServer).AddUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.todo/Test",
+		FullMethod: "/api.TodoService/AddUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TodoServer).Test(ctx, req.(*TestRequest))
+		return srv.(TodoServiceServer).AddUser(ctx, req.(*AddUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Todo_ServiceDesc is the grpc.ServiceDesc for Todo service.
+func _TodoService_LoginUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TodoServiceServer).LoginUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.TodoService/LoginUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TodoServiceServer).LoginUser(ctx, req.(*LoginUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// TodoService_ServiceDesc is the grpc.ServiceDesc for TodoService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Todo_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.todo",
-	HandlerType: (*TodoServer)(nil),
+var TodoService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "api.TodoService",
+	HandlerType: (*TodoServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Test",
-			Handler:    _Todo_Test_Handler,
+			MethodName: "AddUser",
+			Handler:    _TodoService_AddUser_Handler,
+		},
+		{
+			MethodName: "LoginUser",
+			Handler:    _TodoService_LoginUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

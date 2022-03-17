@@ -30,7 +30,7 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
     event.preventDefault();
     axios
     .post('http://localhost:8080/signup',
-    {Username: name, Email: email, Password: password},
+    {UserName: name, Email: email, Password: password},
     { headers: {'Content-Type': 'application/json'}, responseType: 'json' }
     )
     .then(response => console.log('response body:', response.data));
