@@ -7,9 +7,9 @@ import (
 )
 
 type User struct {
-  Username string
-	Email string
-  Password string
+  Username string `binding:"required,min=5,max=30"`
+	Email string    `binding:"required,min=5,max=100"`
+  Password string `binding:"required,min=7,max=32"`
 }
 
 var Users []*User
