@@ -4,7 +4,7 @@ option go_package = "./api/pb";
 
 service TodoService {
   rpc AddUser(AddUserRequest) returns (AddUserResponse) {}
-  rpc LoginUser(LoginRequest) returns (LoginResponse) {}
+  rpc LoginUser(LoginUserRequest) returns (LoginUserResponse) {}
 }
 
 message AddUserRequest {
@@ -20,12 +20,12 @@ message AddUserResponse {
   string Password = 4;
 }
 
-message LoginRequest {
+message LoginUserRequest {
   string Email = 1;
   string Password = 2;
 }
 
-message LoginResponse {
+message LoginUserResponse {
   string Id = 1;
   string UserName = 2;
   string Email = 3;

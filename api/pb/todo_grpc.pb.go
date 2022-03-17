@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TodoServiceClient interface {
 	AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*AddUserResponse, error)
-	LoginUser(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error)
 }
 
 type todoServiceClient struct {
@@ -39,8 +39,8 @@ func (c *todoServiceClient) AddUser(ctx context.Context, in *AddUserRequest, opt
 	return out, nil
 }
 
-func (c *todoServiceClient) LoginUser(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
-	out := new(LoginResponse)
+func (c *todoServiceClient) LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error) {
+	out := new(LoginUserResponse)
 	err := c.cc.Invoke(ctx, "/api.TodoService/LoginUser", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (c *todoServiceClient) LoginUser(ctx context.Context, in *LoginRequest, opt
 // for forward compatibility
 type TodoServiceServer interface {
 	AddUser(context.Context, *AddUserRequest) (*AddUserResponse, error)
-	LoginUser(context.Context, *LoginRequest) (*LoginResponse, error)
+	LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error)
 }
 
 // UnimplementedTodoServiceServer should be embedded to have forward compatible implementations.
@@ -63,7 +63,7 @@ type UnimplementedTodoServiceServer struct {
 func (UnimplementedTodoServiceServer) AddUser(context.Context, *AddUserRequest) (*AddUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddUser not implemented")
 }
-func (UnimplementedTodoServiceServer) LoginUser(context.Context, *LoginRequest) (*LoginResponse, error) {
+func (UnimplementedTodoServiceServer) LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginUser not implemented")
 }
 
@@ -97,7 +97,7 @@ func _TodoService_AddUser_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 func _TodoService_LoginUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(LoginRequest)
+	in := new(LoginUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func _TodoService_LoginUser_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/api.TodoService/LoginUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TodoServiceServer).LoginUser(ctx, req.(*LoginRequest))
+		return srv.(TodoServiceServer).LoginUser(ctx, req.(*LoginUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

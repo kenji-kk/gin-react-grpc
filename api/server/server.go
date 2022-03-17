@@ -63,3 +63,25 @@ func (s *server) AddUser(ctx context.Context, req *pb.AddUserRequest ) (*pb.AddU
 
 }
 
+func (s *server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
+	user := db.User{
+		Email: req.Email,
+		Password: req.Password,
+	}
+	user2, err := user.LoginUser()
+	if err != nil {
+		checkErr("ユーザが存在しない: %v\n", err)
+	}
+	if user.Password != user2.Password {
+		checkErr("パスワードが違います: %v\n", err)
+	}
+
+
+	return &pb.LoginUserResponse{
+		Id : user2.Id,
+		UserName: user2.UserName,
+		Email: user2.Email,
+		Password: user2.Password,
+	}, err
+}
+
