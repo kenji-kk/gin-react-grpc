@@ -70,10 +70,11 @@ func (s *server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.L
 	}
 	user2, err := user.LoginUser()
 	if err != nil {
-		checkErr("ユーザが存在しない: %v\n", err)
+		return nil, err
 	}
 	if user.Password != user2.Password {
-		checkErr("パスワードが違います: %v\n", err)
+		err = fmt.Errorf("パスワードが違います")
+		return nil, err
 	}
 
 
