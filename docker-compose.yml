@@ -46,4 +46,6 @@ services:
       - NODE_ENV=development
     volumes:
       - ./front/:/usr/src/app
-    command: sh -c 'cd /usr/src/app && yarn install && yarn start'
+    command: sh -c 'yarn start'
+    depends_on:
+      - client
