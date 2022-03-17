@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
@@ -33,7 +34,7 @@ func main() {
 	checkErr("Failed to listen: %v", err)
 
 	s := grpc.NewServer()
-	pb.RegisterAppServiceServer(s, &server{})
+	pb.RegisterTodoServiceServer(s, &server{})
 	s.Serve(lis)
 
 	ch := make(chan os.Signal, 1)
@@ -44,5 +45,21 @@ func main() {
 	s.Stop()
 	lis.Close()
 	fmt.Println("終了")
+}
+
+func (s *server) AddUser(ctx context.Context, req *pb.AddUserRequest ) (*pb.AddUserResponse, error) {
+	user := db.User{
+		UserName: req.UserName,
+		Email: req.Email,
+		Password: req.Password,
+	}
+	err := user.AddUser()
+	return &pb.AddUserResponse{
+		Id : "0",
+		UserName: user.UserName,
+		Email: user.Email,
+		Password: user.Password,
+	}, err
+
 }
 
