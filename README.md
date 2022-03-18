@@ -1,5 +1,5 @@
 ## 概要
-docker-composeを使用し、React,Go(Gin),gRPC,MySQLの環境を構築し、簡易的なtodo機能を実装中。
+docker-composeを使用し、React,Go(Gin),gRPC,Nginx,MySQLの環境を構築し、簡易的なtodo機能を実装中。
 
 ## 構築コマンド
 1. `git clone git@github.com:kenji-kk/gin-react-grpc-todo`
