@@ -54,6 +54,9 @@ func (s *server) AddUser(ctx context.Context, req *pb.AddUserRequest ) (*pb.AddU
 		Password: req.Password,
 	}
 	err := user.AddUser()
+	if err != nil {
+		return nil, err
+	}
 	return &pb.AddUserResponse{
 		Id : "0",
 		UserName: user.UserName,
