@@ -23,28 +23,26 @@ func DbConnect() {
 		id INT PRIMARY KEY AUTO_INCREMENT,
 		username VARCHAR(255),
 		email VARCHAR(255),
-		hashedpasseord LONGBLOG,
-		salt LONGBLOG,)`
+		hashedpasseord LONGBLOB,
+		salt LONGBLOB)`
 
-
-		_, err = Db.Exec(cmdC)
-		count := 0
-		if err != nil {
-			for {
-				if err == nil {
-					fmt.Println("")
-					break
-				}
-				fmt.Print(".")
-				time.Sleep(time.Second)
-				count++
-				if count > 180 {
-					fmt.Println("")
-					panic(err)
-				}
-				_, err = Db.Exec(cmdC)
+	_, err = Db.Exec(cmdC)
+	count := 0
+	if err != nil {
+		for {
+			if err == nil {
+				fmt.Println("")
+				break
 			}
+			fmt.Print(".")
+			time.Sleep(time.Second)
+			count++
+			if count > 180 {
+				fmt.Println("")
+				panic(err)
+			}
+			_, err = Db.Exec(cmdC)
 		}
-
-		fmt.Println("テーブル作成成功")
+	}
+	fmt.Println("テーブル作成成功")
 }
