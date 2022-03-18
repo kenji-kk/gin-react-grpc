@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"todo/client/handler"
+	"todo/client/jwt"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,8 @@ import (
 	
 
 func main() {
+		jwt.JwtSetup()
+		
     r := gin.Default()
 		r.Use(cors.New(cors.Config{
 			// 許可したいHTTPメソッドの一覧

@@ -8,7 +8,7 @@ import (
 )
 
 type User struct {
-	Id string
+	Id int64
 	UserName string
 	Email string
 	Password string
@@ -16,15 +16,15 @@ type User struct {
   Salt           []byte 
 }
 
-func (u *User)AddUser() error{
+func (u *User)AddUser() (User, error){
 	salt, err := GenerateSalt()
 	if err != nil {
-    return err
+    return User{}, err
   }
 	toHash := append([]byte(u.Password), salt...)
 	hashedPassword, err := bcrypt.GenerateFromPassword(toHash, bcrypt.DefaultCost)
 	if err != nil {
-    return err
+    return User{}, err
   }
 	u.Salt = salt
   u.HashedPassword = hashedPassword
@@ -34,7 +34,26 @@ func (u *User)AddUser() error{
 		hashedpassword,
 		salt) values (?, ?, ?, ?)`
 	_, err = Db.Exec(cmd, u.UserName, u.Email, u.HashedPassword, u.Salt)
-	return err
+	if err != nil {
+		fmt.Printf("ユーザー追加時にエラーが起きました: %v\n", err)
+		return User{},err
+	}
+
+	cmd = `select id, username, email, hashedpassword, salt from users
+	where email = ?`
+	user := User{}
+	err = Db.QueryRow(cmd, u.Email).Scan(
+		&user.Id,
+		&user.UserName,
+		&user.Email,
+		&user.HashedPassword,
+		&user.Salt,)
+	if err != nil {
+		fmt.Printf("スキャン時にエラーが起きました: %v\n", err)
+		return User{}, err
+	}	
+
+	return user, err
 }
 
 func (u *User)LoginUser() (User, error){
