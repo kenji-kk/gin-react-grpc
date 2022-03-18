@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"todo/client/jwt"
 	"todo/pb"
 
 	"github.com/gin-gonic/gin"
@@ -45,11 +46,17 @@ func Signup(ctx *gin.Context) {
 
 	res, err := c.AddUser(context.Background(), &pb.AddUserRequest{UserName: AddUser.UserName, Email: AddUser.Email, Password: AddUser.Password})
 	checkErr("Fail to create client: %v\n", err)
-	fmt.Printf("AllCountry has geted: %v\n", res)
+	fmt.Printf("User has geted: %v\n", res)
+
+  user := &jwt.AuthenticatedUser{
+    Id: res.Id,
+    UserName: res.UserName,
+    Email: res.Email,
+  }
 
   ctx.JSON(http.StatusOK, gin.H{
     "msg": "Signed up successfully.",
-    "jwt": "123456789",
+    "jwt": jwt.GenerateJWT(user),
   })
 }
 
@@ -66,15 +73,21 @@ func Signin(ctx *gin.Context) {
     return
   }
   
-  _, err = c.LoginUser(context.Background(), &pb.LoginUserRequest{Email: LoginUser.Email, Password: LoginUser.Password})
+  res, err := c.LoginUser(context.Background(), &pb.LoginUserRequest{Email: LoginUser.Email, Password: LoginUser.Password})
   if err != nil {
     fmt.Printf("LoginUserClientでエラーがありました: %v\n", err)
     ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
     return
   }
 
+  user := &jwt.AuthenticatedUser{
+    Id: res.Id,
+    UserName: res.UserName,
+    Email: res.Email,
+  }
+
   ctx.JSON(http.StatusOK, gin.H{
     "msg": "Signed in successfully.",
-    "jwt": "123456789",
+    "jwt": jwt.GenerateJWT(user),
   })
 }

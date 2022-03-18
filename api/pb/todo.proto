@@ -14,10 +14,9 @@ message AddUserRequest {
 }
 
 message AddUserResponse {
-  string Id = 1;
+  int64 Id = 1;
   string UserName = 2;
   string Email = 3;
-  string Password = 4;
 }
 
 message LoginUserRequest {
@@ -26,7 +25,7 @@ message LoginUserRequest {
 }
 
 message LoginUserResponse {
-  string Id = 1;
+  int64 Id = 1;
   string UserName = 2;
   string Email = 3;
 }
