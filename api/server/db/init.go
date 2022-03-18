@@ -23,7 +23,7 @@ func DbConnect() {
 		id INT PRIMARY KEY AUTO_INCREMENT,
 		username VARCHAR(255),
 		email VARCHAR(255),
-		hashedpasseord LONGBLOB,
+		hashedpassword LONGBLOB,
 		salt LONGBLOB)`
 
 	_, err = Db.Exec(cmdC)
