@@ -22,12 +22,17 @@ func FetchUser(id int64) (*User, error) {
 	defer cc.Close()
 	c := pb.NewTodoServiceClient(cc)
 
-  user := new(User)
-  user.Id = id
   res, err := c.GetUserById(context.Background(), &pb.GetUserByIdRequest{Id: id})
   if err != nil {
     log.Error().Err(err).Msg("Error fetching user")
     return nil, err
   }
+
+	user := &User{
+		Id: res.Id,
+		UserName: res.UserName,
+		Email: res.Email,
+	}
+
   return user, nil
 }
