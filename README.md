@@ -8,4 +8,4 @@ docker-composeを使用し、React,Go(Gin),gRPC,Nginx,MySQLの環境を構築し
 ＊一回で立ち上がらなかったらもう一度３を繰り返す
 
 ## 確認URL
-- http://localhost:80 (nginx経由)
+- http://localhost (nginx経由)
