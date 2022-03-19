@@ -1,25 +1,56 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom"
 import axios from 'axios';
 import { AuthPage } from './components/pages/AuthPage';
+import { Home } from './components/pages/Home';
+
+
+interface User {
+  id: number
+  userName: string
+  email: string
+}
+
+export const AuthContext = createContext({} as {
+  loading: boolean
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  isSignedIn: boolean
+  setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>
+  currentUser: User | undefined
+  setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>
+  jwt: string | undefined
+  setJwt: React.Dispatch<React.SetStateAction<string | undefined>>
+})
 
 function App() {
-  const [message, setMessage] = useState<string>()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false)
+  const [currentUser, setCurrentUser] = useState<User | undefined>()
+  const [jwt, setJwt] = useState<string | undefined>()
 
-  useEffect(() => {
-    axios.get('http://localhost:8080/ping', { headers: { 'Content-Type': 'application/json' } })
-    .then(res => {
-      setMessage(res.data.message)
-    })
-    .catch(err => {
-      console.log(err)
-    })
-  }, [])
+
+  const Private = ( ) => {
+    if (!loading) {
+      if (isSignedIn) {
+        return <Home />
+      } else {
+        return <Navigate to="/auth" />
+      }
+    } else {
+      return <></>
+    }
+  }
 
   return (
-    <>
-      <AuthPage />
-    </>
+    <Router>
+      <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser, jwt, setJwt}}>
+          <Routes>
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/" element={<Private />} />
+          </Routes>
+      </AuthContext.Provider>
+    </Router>
   );
 }
 

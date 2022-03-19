@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext }from 'react';
+import { AuthContext } from "../../App"
+import { useNavigate } from "react-router-dom"
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -26,6 +29,10 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const { setIsSignedIn, setCurrentUser, setJwt, jwt } = useContext(AuthContext)
+
+  const navigate = useNavigate();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axios
@@ -33,7 +40,13 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
     {UserName: name, Email: email, Password: password},
     { headers: {'Content-Type': 'application/json'}, responseType: 'json' }
     )
-    .then(response => console.log('response body:', response.data));
+    .then(response => {
+      console.log('response body:', response.data)
+      setIsSignedIn(true)
+      setJwt(response.data.jwt)
+      console.log('jwtがセットされました:', jwt)
+      navigate('/')
+    });
   };
 
   return (
