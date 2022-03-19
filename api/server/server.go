@@ -83,3 +83,17 @@ func (s *server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.L
 	}, err
 }
 
+func (s *server) GetUserById(ctx context.Context, req *pb.GetUserByIdRequest) (*pb.GetUserByIdResponse, error) {
+	user := db.User{
+		Id: req.Id,
+	}
+	user2, err := user.GetUserById()
+	if err != nil {
+		return nil, err
+	}
+	return &pb.GetUserByIdResponse{
+		Id : user2.Id,
+		UserName: user2.UserName,
+		Email: user2.Email,
+	}, err
+}
