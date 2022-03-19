@@ -84,7 +84,7 @@ func GenerateJWT(user *AuthenticatedUser) string {
   return token.String()
 }
 
-func authorization(ctx *gin.Context) {
+func Authorization(ctx *gin.Context) {
   authHeader := ctx.GetHeader("Authorization")
   if authHeader == "" {
     ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing."})
@@ -111,4 +111,21 @@ func authorization(ctx *gin.Context) {
   }
   ctx.Set("user", user)
   ctx.Next()
+}
+
+func CurrentUser(ctx *gin.Context) (*lib.User, error) {
+  var err error
+  _user, exists := ctx.Get("user")
+  if !exists {
+    err = errors.New("Current context user not set")
+    log.Error().Err(err).Msg("")
+    return nil, err
+  }
+  user, ok := _user.(lib.User)
+  if !ok {
+    err = errors.New("Context user is not valid type")
+    log.Error().Err(err).Msg("")
+    return nil, err
+  }
+  return &user, nil
 }
