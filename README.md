@@ -6,3 +6,6 @@ docker-composeを使用し、React,Go(Gin),gRPC,Nginx,MySQLの環境を構築し
 2. `cd gin-react-grpc-todo`
 3. `docker-compose up`
 ＊一回で立ち上がらなかったらもう一度３を繰り返す
+
+## 確認URL
+- http://localhost:80 (nginx経由)
