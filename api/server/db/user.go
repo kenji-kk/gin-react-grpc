@@ -80,6 +80,23 @@ func (u *User)LoginUser() (User, error){
 	return user2, err
 }
 
+func(u *User)GetUserById() (User, error){
+	cmd := `select id, username, email, hashedpassword, salt from users
+	where id = ?`
+	user2 := User{}
+	err := Db.QueryRow(cmd, u.Id).Scan(
+		&user2.Id,
+		&user2.UserName,
+		&user2.Email,
+		&user2.HashedPassword,
+		&user2.Salt,)
+	if err != nil {
+		fmt.Printf("スキャン時にエラーが起きました: %v\n", err)
+		return User{}, err
+	}	
+	return user2, err
+}
+
 func GenerateSalt() ([]byte, error) {
   salt := make([]byte, 16)
   if _, err := rand.Read(salt); err != nil {
