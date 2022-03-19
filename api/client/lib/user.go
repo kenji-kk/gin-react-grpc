@@ -2,7 +2,6 @@ package lib
 
 import (
 	"context"
-	"todo/client/handler"
 	"todo/pb"
 
 	"github.com/rs/zerolog/log"
@@ -18,7 +17,10 @@ type User struct {
 func FetchUser(id int64) (*User, error) {
 	opts := grpc.WithInsecure()
 	cc, err := grpc.Dial("server:50051", opts)
-	handler.CheckErr("could not connect: %v\n", err)
+	if err != nil {
+		log.Error().Msgf("could not connect: %v", err)
+		return nil, err
+	}
 	defer cc.Close()
 	c := pb.NewTodoServiceClient(cc)
 

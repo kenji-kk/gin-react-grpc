@@ -24,6 +24,8 @@ type LoginUser struct {
   Password string `binding:"required,min=7,max=32"`
 }
 
+
+
 func CheckErr(message string, err error) {
 	if err != nil {
 		log.Fatalf(message, err)
