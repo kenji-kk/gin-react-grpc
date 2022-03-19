@@ -5,6 +5,7 @@ option go_package = "./api/pb";
 service TodoService {
   rpc AddUser(AddUserRequest) returns (AddUserResponse) {}
   rpc LoginUser(LoginUserRequest) returns (LoginUserResponse) {}
+  rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse) {}
 }
 
 message AddUserRequest {
@@ -25,6 +26,16 @@ message LoginUserRequest {
 }
 
 message LoginUserResponse {
+  int64 Id = 1;
+  string UserName = 2;
+  string Email = 3;
+}
+
+message GetUserByIdRequest {
+  int64 Id = 1;
+}
+
+message GetUserByIdResponse {
   int64 Id = 1;
   string UserName = 2;
   string Email = 3;

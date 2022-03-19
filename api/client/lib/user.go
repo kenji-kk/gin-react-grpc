@@ -24,7 +24,7 @@ func FetchUser(id int64) (*User, error) {
 
   user := new(User)
   user.Id = id
-  res, err := c.GetUser(context.Background(), &pb.GetUserRequest{Id: id})
+  res, err := c.GetUserById(context.Background(), &pb.GetUserByIdRequest{Id: id})
   if err != nil {
     log.Error().Err(err).Msg("Error fetching user")
     return nil, err
