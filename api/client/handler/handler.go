@@ -24,7 +24,7 @@ type LoginUser struct {
   Password string `binding:"required,min=7,max=32"`
 }
 
-func checkErr(message string, err error) {
+func CheckErr(message string, err error) {
 	if err != nil {
 		log.Fatalf(message, err)
 	}
@@ -34,7 +34,7 @@ func checkErr(message string, err error) {
 func Signup(ctx *gin.Context) {
   opts := grpc.WithInsecure()
 	cc, err := grpc.Dial("server:50051", opts)
-	checkErr("could not connect: %v\n", err)
+	CheckErr("could not connect: %v\n", err)
 	defer cc.Close()
 	c := pb.NewTodoServiceClient(cc)
 
@@ -45,7 +45,7 @@ func Signup(ctx *gin.Context) {
   }
 
 	res, err := c.AddUser(context.Background(), &pb.AddUserRequest{UserName: AddUser.UserName, Email: AddUser.Email, Password: AddUser.Password})
-	checkErr("Fail to create client: %v\n", err)
+	CheckErr("Fail to create client: %v\n", err)
 	fmt.Printf("User has geted: %v\n", res)
 
   user := &jwt.AuthenticatedUser{
@@ -63,7 +63,7 @@ func Signup(ctx *gin.Context) {
 func Signin(ctx *gin.Context) {
   opts := grpc.WithInsecure()
 	cc, err := grpc.Dial("server:50051", opts)
-	checkErr("could not connect: %v\n", err)
+	CheckErr("could not connect: %v\n", err)
 	defer cc.Close()
 	c := pb.NewTodoServiceClient(cc)
 
