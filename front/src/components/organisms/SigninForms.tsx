@@ -1,6 +1,7 @@
 import { useState, useContext }from 'react';
-import { AuthContext } from "../../App"
+import axios from 'axios';
 import { useNavigate } from "react-router-dom"
+import { AuthContext } from "../../App"
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -16,16 +17,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import axios from 'axios';
-
 interface PROPS {
   setFormToggle:any;
 }
 
 const theme = createTheme();
 
-export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
-  const [name, setName] = useState('');
+export const SignInForms: React.VFC<PROPS> = ({setFormToggle}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -36,8 +34,8 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     axios
-    .post('http://localhost:8080/signup',
-    {UserName: name, Email: email, Password: password},
+    .post('http://localhost:8080/signin',
+    {Email: email, Password: password},
     { headers: {'Content-Type': 'application/json'}, responseType: 'json' }
     )
     .then(response => {
@@ -45,8 +43,8 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
       setIsSignedIn(true)
       setJwt(response.data.jwt)
       console.log('jwtがセットされました:', jwt)
-      navigate('/')
-    });
+      navigate('/')}
+    )
   };
 
   return (
@@ -65,67 +63,45 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            新規登録
+            ログイン
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="given-name"
-                  name="UserName"
-                  required
-                  fullWidth
-                  id="UserName"
-                  label="ユーザ名"
-                  autoFocus
-                  value={name}
-                  onChange={(event) => {
-                    setName(event.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="メールアドレス"
-                  name="email"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="パスワード"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  value={password}
-                  onChange={(event) => {
-                    setPassword(event.target.value);
-                  }}
-                />
-              </Grid>
-            </Grid>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="メールアドレス"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="パスワード"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              >
-              登録
+            >
+              ログイン
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Button onClick={() => {setFormToggle(false)}}>
-                  アカウントお持ちの方はこちら
+                <Button onClick={() => {setFormToggle(true)}}>
+                  アカウントお持ちでない方はこちら
                 </Button>
               </Grid>
             </Grid>

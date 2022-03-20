@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { SignUp } from '../organisms/Signup'
-import { SignIn } from '../organisms/Signin'
+import { SignUpForms } from '../organisms/SignupForms'
+import { SignInForms } from '../organisms/SigninForms'
 
 export const AuthPage = () => {
   const [formToggle, setFormToggle] = useState(true)
@@ -8,7 +8,7 @@ export const AuthPage = () => {
 
   return (
     <>
-      {formToggle ? <SignUp setFormToggle={setFormToggle}/> : <SignIn setFormToggle={setFormToggle}/>}
+      {formToggle ? <SignUpForms setFormToggle={setFormToggle}/> : <SignInForms setFormToggle={setFormToggle}/>}
     </>
   )
 }
