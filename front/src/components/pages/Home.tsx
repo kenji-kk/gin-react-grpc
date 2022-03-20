@@ -1,4 +1,4 @@
-import React from 'react'
+import {memo} from 'react'
 import { makeStyles } from '@mui/styles';
 import { Container } from '@mui/material';
 
@@ -13,7 +13,7 @@ const useStyles = makeStyles({
   }
 })
 
-export const Home = () => {
+export const Home:React.VFC = memo(() => {
   const classes = useStyles();
 
   return (
@@ -25,4 +25,4 @@ export const Home = () => {
     </Container>
    
   )
-}
+})

@@ -1,4 +1,4 @@
-import { useState, useContext }from 'react';
+import { useState, useContext, memo }from 'react';
 import { AuthContext } from "../../App"
 import { useNavigate } from "react-router-dom"
 
@@ -24,7 +24,7 @@ interface PROPS {
 
 const theme = createTheme();
 
-export const SignUpForms:React.VFC<PROPS> = ({setFormToggle}) =>{
+export const SignUpForms:React.VFC<PROPS> = memo(({setFormToggle}) =>{
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -134,4 +134,4 @@ export const SignUpForms:React.VFC<PROPS> = ({setFormToggle}) =>{
       </Container>
     </ThemeProvider>
   );
-}
+})

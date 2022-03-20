@@ -1,4 +1,4 @@
-import { useState, useContext }from 'react';
+import { useState, useContext, memo }from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../../App"
@@ -23,7 +23,7 @@ interface PROPS {
 
 const theme = createTheme();
 
-export const SignInForms: React.VFC<PROPS> = ({setFormToggle}) => {
+export const SignInForms: React.VFC<PROPS> = memo(({setFormToggle}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -110,4 +110,4 @@ export const SignInForms: React.VFC<PROPS> = ({setFormToggle}) => {
       </Container>
     </ThemeProvider>
   );
-}
+})
