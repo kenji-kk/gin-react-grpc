@@ -1,4 +1,4 @@
-import { useState, useContext }from 'react';
+import { useState, useContext, memo }from 'react';
 import { AuthContext } from "../../App"
 import { useNavigate } from "react-router-dom"
 
@@ -6,9 +6,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -19,12 +16,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 
 interface PROPS {
-  setFormToggle:any;
+  setFormToggle: (value: boolean) => void;
 }
 
 const theme = createTheme();
 
-export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
+export const SignUpForms:React.VFC<PROPS> = memo(({setFormToggle}) =>{
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -134,4 +131,4 @@ export const SignUp:React.VFC<PROPS> = ({setFormToggle}) =>{
       </Container>
     </ThemeProvider>
   );
-}
+})
