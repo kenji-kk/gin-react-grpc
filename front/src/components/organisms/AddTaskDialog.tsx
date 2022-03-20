@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { makeStyles } from '@mui/styles';
+
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -12,7 +14,17 @@ interface Props {
   setAddTaskDialogIsOpen: (value: boolean) => void;
 }
 
+const useStyles = makeStyles({
+  dummy: {
+    width: '40vw',
+  },
+  title: {
+    textAlign: 'center'
+  }
+})
+
 export const AddTaskDialog:React.VFC<Props> = ({AddTaskDialogIsOpen, setAddTaskDialogIsOpen}) =>{
+  const classes = useStyles();
 
   const handleClose = () => {
     setAddTaskDialogIsOpen(false);
@@ -21,25 +33,35 @@ export const AddTaskDialog:React.VFC<Props> = ({AddTaskDialogIsOpen, setAddTaskD
   return (
     <div>
       <Dialog open={AddTaskDialogIsOpen} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
+        <div className={classes.dummy}></div>
+        <DialogTitle className={classes.title}>タスク作成フォーム</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Email Address"
-            type="email"
+            label="タスク名"
+            type="text"
             fullWidth
+            variant="standard"
+          />
+          <br/>
+          <br/>
+          <br/>
+          <TextField
+            margin="dense"
+            id="name"
+            label="タスク内容"
+            type="text"
+            fullWidth
+            multiline
+            rows={4}
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Button onClick={handleClose}>閉じる</Button>
+          <Button onClick={handleClose}>作成</Button>
         </DialogActions>
       </Dialog>
     </div>
