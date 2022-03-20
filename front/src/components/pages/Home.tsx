@@ -1,8 +1,8 @@
 import React from 'react'
 import { makeStyles } from '@mui/styles';
 import { Container } from '@mui/material';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
+
+import { AddTaskButton } from '../atoms/AddTaskButton';
 
 const useStyles = makeStyles({
   title: {
@@ -20,9 +20,7 @@ export const Home = () => {
     <Container>
       <h1 className={classes.title}>TODOアプリ</h1>
       <div className={classes.buttonWrap}>
-        <Button  variant="contained" endIcon={<AddIcon />}>
-          タスク追加
-        </Button>
+        <AddTaskButton />
       </div>
     </Container>
    
