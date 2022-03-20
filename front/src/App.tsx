@@ -30,10 +30,10 @@ function App() {
   const [jwt, setJwt] = useState<string | undefined>()
 
 
-  const Private = ( ) => {
+  const Private = ({ children }: { children: React.ReactElement }) => {
     if (!loading) {
       if (isSignedIn) {
-        return <Home />
+        return children
       } else {
         return <Navigate to="/auth" />
       }
@@ -47,7 +47,7 @@ function App() {
       <AuthContext.Provider value={{ loading, setLoading, isSignedIn, setIsSignedIn, currentUser, setCurrentUser, jwt, setJwt}}>
           <Routes>
             <Route path="/auth" element={<AuthPage />} />
-            <Route path="/" element={<Private />} />
+            <Route path="/" element={<Private><Home /></Private>} />
           </Routes>
       </AuthContext.Provider>
     </Router>
