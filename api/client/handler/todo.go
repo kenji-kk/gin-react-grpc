@@ -44,7 +44,7 @@ func CreateTodo(ctx *gin.Context){
 
 	_, err = c.CreateTodo(context.Background(), &pb.CreateTodoRequest{User: pUser, Todo: pTodo})
 	if err != nil {
-    fmt.Printf("LoginUserClientでエラーがありました: %v\n", err)
+    fmt.Printf("CreateTodoハンドラでエラーがありました: %v\n", err)
     ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
     return
   }
@@ -68,5 +68,15 @@ func GetTodos(ctx *gin.Context) {
     return
   }
 
+	todos, err := c.GetTodos(context.Background(), &pb.GetTodosRequest{UserId: user.Id})
+	if err != nil {
+		fmt.Printf("GetTodosハンドラでエラーがありました: %v\n", err)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+		return
+	}
 
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "Get todos successfully.",
+		"data": todos,
+	})
 }
