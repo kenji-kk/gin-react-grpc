@@ -18,3 +18,25 @@ func (t *Todo) CreateTodo() error {
 	}
 	return nil
 }
+
+func GetTodos(userId int64) ([]Todo, error) {
+	cmd := `select title, content from todos where user_id = ?`
+	rows, err := Db.Query(cmd, userId)
+	if err != nil {
+		fmt.Printf("GetTodosでエラーが起きました: %v\n", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	var todos []Todo
+	for rows.Next() {
+		var todo Todo
+		err := rows.Scan(&todo.Title, &todo.Content)
+		if err != nil {
+			fmt.Printf("スキャン時にエラーが起きました: %v\n", err)
+			return nil, err
+		}
+		todos = append(todos, todo)
+	}
+	return todos, nil
+}

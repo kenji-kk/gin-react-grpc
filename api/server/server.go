@@ -113,3 +113,22 @@ func (s *server) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb
 	return &pb.CreateTodoResponse{}, nil
 
 }
+
+func (s *server) GetTodos(ctx context.Context, req *pb.GetTodosRequest) (*pb.GetTodosResponse, error) {
+	userId := req.UserId
+	todos, err := db.GetTodos(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	var pTodos []*pb.Todo
+	for _, todo := range todos {
+		pTodos = append(pTodos, &pb.Todo{
+			Title: todo.Title,
+			Content: todo.Content,
+		})
+	}
+	return &pb.GetTodosResponse{
+		Todos: pTodos,
+	}, nil
+}
