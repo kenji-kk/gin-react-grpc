@@ -20,6 +20,7 @@ const useStyles = makeStyles({
 export const Home:React.VFC = memo(() => {
   const classes = useStyles();
   const [AddTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
+  const [todos, setTodos] = useState<{title:string,content:string}[]>([]);
 
   const handleClickOpen = () => {
     setAddTaskDialogIsOpen(true);
@@ -37,8 +38,9 @@ export const Home:React.VFC = memo(() => {
     )
     .then(response => {
       console.log('response body:', response.data.data)
+      setTodos(response.data.data.todos)
     })
-  })
+  },[])
 
   return (
     <>
@@ -47,6 +49,12 @@ export const Home:React.VFC = memo(() => {
         <div className={classes.buttonWrap}>
           <AddTaskButton handleClickOpen={handleClickOpen}/>
         </div>
+        {todos.map((todo, index) => (
+          <div key={index}>
+            <h2>{todo.title}</h2>
+            <p>{todo.content}</p>
+          </div>
+        ))}
       </Container>
 
       <AddTaskDialog AddTaskDialogIsOpen={AddTaskDialogIsOpen} setAddTaskDialogIsOpen={setAddTaskDialogIsOpen}/>
