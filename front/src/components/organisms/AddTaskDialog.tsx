@@ -50,8 +50,12 @@ export const AddTaskDialog:React.VFC<Props> = ({AddTaskDialogIsOpen, setAddTaskD
     )
     .then(response => {
       console.log('response body:', response.data.data)
+      handleClose()
+      setTitle("")
+      setContent("")
     }
-    )}
+    )
+    }
 
   return (
     <div>
