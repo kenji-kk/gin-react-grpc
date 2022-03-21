@@ -61,7 +61,7 @@ export const AddTaskDialog:React.VFC<Props> = ({AddTaskDialogIsOpen, setAddTaskD
     <div>
         <Dialog open={AddTaskDialogIsOpen} onClose={handleClose}>
           <div className={classes.dummy}></div>
-          <DialogTitle className={classes.title}>タスク作成フォームaa</DialogTitle>
+          <DialogTitle className={classes.title}>タスク作成フォーム</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
