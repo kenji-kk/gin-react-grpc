@@ -49,9 +49,11 @@ func CreateTodo(ctx *gin.Context){
     return
   }
 
+	//React側ではkeyの頭文字を小文字で扱うので小文字に変換
+	returnTodo := map[string]string{"title": todo.Title, "content": todo.Content}
 	ctx.JSON(http.StatusOK, gin.H{
     "msg":  "Post created successfully.",
-    "data": todo,
+    "data": returnTodo,
   })
 }
 
