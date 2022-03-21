@@ -9,12 +9,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Box from '@mui/material/Box';
 
 
 interface Props {
   AddTaskDialogIsOpen: boolean;
   setAddTaskDialogIsOpen: (value: boolean) => void;
+  setTodos: any
 }
 
 const useStyles = makeStyles({
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   }
 })
 
-export const AddTaskDialog:React.VFC<Props> = ({AddTaskDialogIsOpen, setAddTaskDialogIsOpen}) =>{
+export const AddTaskDialog:React.VFC<Props> = ({AddTaskDialogIsOpen, setAddTaskDialogIsOpen, setTodos}) =>{
   const classes = useStyles();
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
@@ -50,6 +50,7 @@ export const AddTaskDialog:React.VFC<Props> = ({AddTaskDialogIsOpen, setAddTaskD
     )
     .then(response => {
       console.log('response body:', response.data.data)
+      setTodos((prevTodos:any) => [...prevTodos, response.data.data])
       handleClose()
       setTitle("")
       setContent("")

@@ -14,7 +14,11 @@ const useStyles = makeStyles({
   },
   buttonWrap: {
     textAlign: 'center',
-  }
+  },
+  todoListWrap: {
+    margin: '0 auto',
+    width: '30vw',
+  },
 })
 
 export const Home:React.VFC = memo(() => {
@@ -49,15 +53,18 @@ export const Home:React.VFC = memo(() => {
         <div className={classes.buttonWrap}>
           <AddTaskButton handleClickOpen={handleClickOpen}/>
         </div>
-        {todos.map((todo, index) => (
-          <div key={index}>
-            <h2>{todo.title}</h2>
-            <p>{todo.content}</p>
-          </div>
-        ))}
+        <div className={classes.todoListWrap}>
+          {todos.map((todo, index) => (
+            <div key={index} >
+              <p>タスク名：{todo.title}</p>
+              <p>タスク内容：{todo.content}</p>
+              <hr/>
+            </div>
+          ))}
+        </div>
       </Container>
 
-      <AddTaskDialog AddTaskDialogIsOpen={AddTaskDialogIsOpen} setAddTaskDialogIsOpen={setAddTaskDialogIsOpen}/>
+      <AddTaskDialog AddTaskDialogIsOpen={AddTaskDialogIsOpen} setAddTaskDialogIsOpen={setAddTaskDialogIsOpen} setTodos={setTodos}/>
     </>
   )
 })
