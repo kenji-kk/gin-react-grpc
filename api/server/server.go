@@ -97,3 +97,19 @@ func (s *server) GetUserById(ctx context.Context, req *pb.GetUserByIdRequest) (*
 		Email: user2.Email,
 	}, err
 }
+
+func (s *server) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error) {
+	todo := db.Todo{
+		Title: req.Todo.Title,
+		Content: req.Todo.Content,
+		UserId: req.User.Id,
+	}
+
+	err := todo.CreateTodo()
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.CreateTodoResponse{}, nil
+
+}
