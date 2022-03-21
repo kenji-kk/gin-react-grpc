@@ -42,7 +42,9 @@ export const Home:React.VFC = memo(() => {
     )
     .then(response => {
       console.log('response body:', response.data.data)
-      setTodos(response.data.data.todos)
+      if (response.data.data.todos?.length > 0 ){
+        setTodos(response.data.data.todos)
+      }
     })
   },[])
 
