@@ -122,11 +122,11 @@ func CurrentUser(ctx *gin.Context) (*lib.User, error) {
     log.Error().Err(err).Msg("")
     return nil, err
   }
-  user, ok := _user.(lib.User)
+  user, ok := _user.(*lib.User)
   if !ok {
     err = errors.New("Context user is not valid type")
     log.Error().Err(err).Msg("")
     return nil, err
   }
-  return &user, nil
+  return user, nil
 }
