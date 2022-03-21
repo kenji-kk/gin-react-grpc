@@ -54,5 +54,11 @@ func main() {
     })
 		r.POST("/signup", handler.Signup)
   	r.POST("/signin", handler.Signin)
+
+		authorized := r.Group("/")
+		authorized.Use(jwt.Authorization)
+		{
+			authorized.POST("/todos",handler.CreateTodo)
+		}
     r.Run()
 }
