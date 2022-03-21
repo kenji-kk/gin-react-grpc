@@ -6,6 +6,7 @@ service TodoService {
   rpc AddUser(AddUserRequest) returns (AddUserResponse) {}
   rpc LoginUser(LoginUserRequest) returns (LoginUserResponse) {}
   rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse) {}
+  rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse) {}
 }
 
 message AddUserRequest {
@@ -40,3 +41,21 @@ message GetUserByIdResponse {
   string UserName = 2;
   string Email = 3;
 }
+
+
+// CreateTodo
+
+message CreateTodoRequest {
+  message user {
+  int64 Id = 1;
+  string UserName = 2;
+  string Email = 3;
+  }
+
+  message todo {
+    string Title = 1;
+    string Content = 2;
+  }
+}
+
+message CreateTodoResponse {}

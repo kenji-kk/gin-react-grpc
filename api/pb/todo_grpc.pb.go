@@ -21,6 +21,7 @@ type TodoServiceClient interface {
 	AddUser(ctx context.Context, in *AddUserRequest, opts ...grpc.CallOption) (*AddUserResponse, error)
 	LoginUser(ctx context.Context, in *LoginUserRequest, opts ...grpc.CallOption) (*LoginUserResponse, error)
 	GetUserById(ctx context.Context, in *GetUserByIdRequest, opts ...grpc.CallOption) (*GetUserByIdResponse, error)
+	CreateTodo(ctx context.Context, in *CreateTodoRequest, opts ...grpc.CallOption) (*CreateTodoResponse, error)
 }
 
 type todoServiceClient struct {
@@ -58,6 +59,15 @@ func (c *todoServiceClient) GetUserById(ctx context.Context, in *GetUserByIdRequ
 	return out, nil
 }
 
+func (c *todoServiceClient) CreateTodo(ctx context.Context, in *CreateTodoRequest, opts ...grpc.CallOption) (*CreateTodoResponse, error) {
+	out := new(CreateTodoResponse)
+	err := c.cc.Invoke(ctx, "/api.TodoService/CreateTodo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TodoServiceServer is the server API for TodoService service.
 // All implementations should embed UnimplementedTodoServiceServer
 // for forward compatibility
@@ -65,6 +75,7 @@ type TodoServiceServer interface {
 	AddUser(context.Context, *AddUserRequest) (*AddUserResponse, error)
 	LoginUser(context.Context, *LoginUserRequest) (*LoginUserResponse, error)
 	GetUserById(context.Context, *GetUserByIdRequest) (*GetUserByIdResponse, error)
+	CreateTodo(context.Context, *CreateTodoRequest) (*CreateTodoResponse, error)
 }
 
 // UnimplementedTodoServiceServer should be embedded to have forward compatible implementations.
@@ -79,6 +90,9 @@ func (UnimplementedTodoServiceServer) LoginUser(context.Context, *LoginUserReque
 }
 func (UnimplementedTodoServiceServer) GetUserById(context.Context, *GetUserByIdRequest) (*GetUserByIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserById not implemented")
+}
+func (UnimplementedTodoServiceServer) CreateTodo(context.Context, *CreateTodoRequest) (*CreateTodoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTodo not implemented")
 }
 
 // UnsafeTodoServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -146,6 +160,24 @@ func _TodoService_GetUserById_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TodoService_CreateTodo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateTodoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TodoServiceServer).CreateTodo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.TodoService/CreateTodo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TodoServiceServer).CreateTodo(ctx, req.(*CreateTodoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TodoService_ServiceDesc is the grpc.ServiceDesc for TodoService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -164,6 +196,10 @@ var TodoService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserById",
 			Handler:    _TodoService_GetUserById_Handler,
+		},
+		{
+			MethodName: "CreateTodo",
+			Handler:    _TodoService_CreateTodo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
