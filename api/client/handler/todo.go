@@ -54,3 +54,19 @@ func CreateTodo(ctx *gin.Context){
     "data": todo,
   })
 }
+
+func GetTodos(ctx *gin.Context) {
+	opts := grpc.WithInsecure()
+	cc, err := grpc.Dial("server:50051", opts)
+	CheckErr("could not connect: %v\n", err)
+	defer cc.Close()
+	c := pb.NewTodoServiceClient(cc)
+
+	user, err := jwt.CurrentUser(ctx)
+	if err != nil {
+    ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+    return
+  }
+
+
+}
