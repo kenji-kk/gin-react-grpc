@@ -1,9 +1,12 @@
-import { useState, memo } from 'react'
+import { useState, useEffect, memo, useContext} from 'react'
+
 import { makeStyles } from '@mui/styles';
 import { Container } from '@mui/material';
 
+import { AuthContext } from '../../App';
 import { AddTaskButton } from '../atoms/AddTaskButton';
 import { AddTaskDialog } from '../organisms/AddTaskDialog';
+import axios from 'axios';
 
 const useStyles = makeStyles({
   title: {
@@ -21,6 +24,21 @@ export const Home:React.VFC = memo(() => {
   const handleClickOpen = () => {
     setAddTaskDialogIsOpen(true);
   };
+
+  const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    axios
+    .get('http://localhost:8080/todos',
+    { headers: {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + authContext.jwt
+                }, 
+    responseType: 'json' }
+    )
+    .then(response => {
+      console.log('response body:', response.data.data)
+    })
+  })
 
   return (
     <>
