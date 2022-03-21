@@ -19,6 +19,7 @@ type AuthenticatedUser struct {
   Id int64
   UserName string
   Email string
+  Todos []*lib.Todo
 }
 
 var (
