@@ -44,7 +44,7 @@ func CreateTodo(ctx *gin.Context){
 
 	_, err = c.CreateTodo(context.Background(), &pb.CreateTodoRequest{User: pUser, Todo: pTodo})
 	if err != nil {
-    fmt.Printf("LoginUserClientでエラーがありました: %v\n", err)
+    fmt.Printf("CreateTodoハンドラでエラーがありました: %v\n", err)
     ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
     return
   }
@@ -53,4 +53,30 @@ func CreateTodo(ctx *gin.Context){
     "msg":  "Post created successfully.",
     "data": todo,
   })
+}
+
+func GetTodos(ctx *gin.Context) {
+	opts := grpc.WithInsecure()
+	cc, err := grpc.Dial("server:50051", opts)
+	CheckErr("could not connect: %v\n", err)
+	defer cc.Close()
+	c := pb.NewTodoServiceClient(cc)
+
+	user, err := jwt.CurrentUser(ctx)
+	if err != nil {
+    ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+    return
+  }
+
+	todos, err := c.GetTodos(context.Background(), &pb.GetTodosRequest{UserId: user.Id})
+	if err != nil {
+		fmt.Printf("GetTodosハンドラでエラーがありました: %v\n", err)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "Get todos successfully.",
+		"data": todos,
+	})
 }

@@ -586,6 +586,101 @@ func (*CreateTodoResponse) Descriptor() ([]byte, []int) {
 	return file_api_pb_todo_proto_rawDescGZIP(), []int{9}
 }
 
+// GetTodos
+type GetTodosRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId int64 `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+}
+
+func (x *GetTodosRequest) Reset() {
+	*x = GetTodosRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_pb_todo_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetTodosRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTodosRequest) ProtoMessage() {}
+
+func (x *GetTodosRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pb_todo_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTodosRequest.ProtoReflect.Descriptor instead.
+func (*GetTodosRequest) Descriptor() ([]byte, []int) {
+	return file_api_pb_todo_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetTodosRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+type GetTodosResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Todos []*Todo `protobuf:"bytes,1,rep,name=todos,proto3" json:"todos,omitempty"`
+}
+
+func (x *GetTodosResponse) Reset() {
+	*x = GetTodosResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_pb_todo_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetTodosResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTodosResponse) ProtoMessage() {}
+
+func (x *GetTodosResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_pb_todo_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTodosResponse.ProtoReflect.Descriptor instead.
+func (*GetTodosResponse) Descriptor() ([]byte, []int) {
+	return file_api_pb_todo_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetTodosResponse) GetTodos() []*Todo {
+	if x != nil {
+		return x.Todos
+	}
+	return nil
+}
+
 var File_api_pb_todo_proto protoreflect.FileDescriptor
 
 var file_api_pb_todo_proto_rawDesc = []byte{
@@ -634,7 +729,13 @@ var file_api_pb_todo_proto_rawDesc = []byte{
 	0x1d, 0x0a, 0x04, 0x74, 0x6f, 0x64, 0x6f, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x09, 0x2e,
 	0x61, 0x70, 0x69, 0x2e, 0x54, 0x6f, 0x64, 0x6f, 0x52, 0x04, 0x74, 0x6f, 0x64, 0x6f, 0x22, 0x14,
 	0x0a, 0x12, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x64, 0x6f, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x32, 0x88, 0x02, 0x0a, 0x0b, 0x54, 0x6f, 0x64, 0x6f, 0x53, 0x65, 0x72,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x29, 0x0a, 0x0f, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x64, 0x6f, 0x73,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x22,
+	0x33, 0x0a, 0x10, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x64, 0x6f, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x1f, 0x0a, 0x05, 0x74, 0x6f, 0x64, 0x6f, 0x73, 0x18, 0x01, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x09, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x54, 0x6f, 0x64, 0x6f, 0x52, 0x05, 0x74,
+	0x6f, 0x64, 0x6f, 0x73, 0x32, 0xc3, 0x02, 0x0a, 0x0b, 0x54, 0x6f, 0x64, 0x6f, 0x53, 0x65, 0x72,
 	0x76, 0x69, 0x63, 0x65, 0x12, 0x36, 0x0a, 0x07, 0x41, 0x64, 0x64, 0x55, 0x73, 0x65, 0x72, 0x12,
 	0x13, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x41, 0x64, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71,
 	0x75, 0x65, 0x73, 0x74, 0x1a, 0x14, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x41, 0x64, 0x64, 0x55, 0x73,
@@ -650,9 +751,12 @@ var file_api_pb_todo_proto_rawDesc = []byte{
 	0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x64, 0x6f, 0x12, 0x16, 0x2e, 0x61,
 	0x70, 0x69, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x6f, 0x64, 0x6f, 0x52, 0x65, 0x71,
 	0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74,
-	0x65, 0x54, 0x6f, 0x64, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42,
-	0x0a, 0x5a, 0x08, 0x2e, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x33,
+	0x65, 0x54, 0x6f, 0x64, 0x6f, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12,
+	0x39, 0x0a, 0x08, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x64, 0x6f, 0x73, 0x12, 0x14, 0x2e, 0x61, 0x70,
+	0x69, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x64, 0x6f, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x15, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x6f, 0x64, 0x6f, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x0a, 0x5a, 0x08, 0x2e, 0x2f,
+	0x61, 0x70, 0x69, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -667,7 +771,7 @@ func file_api_pb_todo_proto_rawDescGZIP() []byte {
 	return file_api_pb_todo_proto_rawDescData
 }
 
-var file_api_pb_todo_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_api_pb_todo_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_api_pb_todo_proto_goTypes = []interface{}{
 	(*AddUserRequest)(nil),      // 0: api.AddUserRequest
 	(*AddUserResponse)(nil),     // 1: api.AddUserResponse
@@ -679,23 +783,28 @@ var file_api_pb_todo_proto_goTypes = []interface{}{
 	(*Todo)(nil),                // 7: api.Todo
 	(*CreateTodoRequest)(nil),   // 8: api.CreateTodoRequest
 	(*CreateTodoResponse)(nil),  // 9: api.CreateTodoResponse
+	(*GetTodosRequest)(nil),     // 10: api.GetTodosRequest
+	(*GetTodosResponse)(nil),    // 11: api.GetTodosResponse
 }
 var file_api_pb_todo_proto_depIdxs = []int32{
-	6, // 0: api.CreateTodoRequest.user:type_name -> api.User
-	7, // 1: api.CreateTodoRequest.todo:type_name -> api.Todo
-	0, // 2: api.TodoService.AddUser:input_type -> api.AddUserRequest
-	2, // 3: api.TodoService.LoginUser:input_type -> api.LoginUserRequest
-	4, // 4: api.TodoService.GetUserById:input_type -> api.GetUserByIdRequest
-	8, // 5: api.TodoService.CreateTodo:input_type -> api.CreateTodoRequest
-	1, // 6: api.TodoService.AddUser:output_type -> api.AddUserResponse
-	3, // 7: api.TodoService.LoginUser:output_type -> api.LoginUserResponse
-	5, // 8: api.TodoService.GetUserById:output_type -> api.GetUserByIdResponse
-	9, // 9: api.TodoService.CreateTodo:output_type -> api.CreateTodoResponse
-	6, // [6:10] is the sub-list for method output_type
-	2, // [2:6] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	6,  // 0: api.CreateTodoRequest.user:type_name -> api.User
+	7,  // 1: api.CreateTodoRequest.todo:type_name -> api.Todo
+	7,  // 2: api.GetTodosResponse.todos:type_name -> api.Todo
+	0,  // 3: api.TodoService.AddUser:input_type -> api.AddUserRequest
+	2,  // 4: api.TodoService.LoginUser:input_type -> api.LoginUserRequest
+	4,  // 5: api.TodoService.GetUserById:input_type -> api.GetUserByIdRequest
+	8,  // 6: api.TodoService.CreateTodo:input_type -> api.CreateTodoRequest
+	10, // 7: api.TodoService.GetTodos:input_type -> api.GetTodosRequest
+	1,  // 8: api.TodoService.AddUser:output_type -> api.AddUserResponse
+	3,  // 9: api.TodoService.LoginUser:output_type -> api.LoginUserResponse
+	5,  // 10: api.TodoService.GetUserById:output_type -> api.GetUserByIdResponse
+	9,  // 11: api.TodoService.CreateTodo:output_type -> api.CreateTodoResponse
+	11, // 12: api.TodoService.GetTodos:output_type -> api.GetTodosResponse
+	8,  // [8:13] is the sub-list for method output_type
+	3,  // [3:8] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_api_pb_todo_proto_init() }
@@ -824,6 +933,30 @@ func file_api_pb_todo_proto_init() {
 				return nil
 			}
 		}
+		file_api_pb_todo_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetTodosRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_pb_todo_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetTodosResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -831,7 +964,7 @@ func file_api_pb_todo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_pb_todo_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

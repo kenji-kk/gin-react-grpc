@@ -58,6 +58,7 @@ func main() {
 		authorized := r.Group("/")
 		authorized.Use(jwt.Authorization)
 		{
+			authorized.GET("/todos", handler.GetTodos)
 			authorized.POST("/todos",handler.CreateTodo)
 		}
     r.Run()
