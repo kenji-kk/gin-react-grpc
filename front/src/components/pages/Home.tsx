@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 export const Home:React.VFC = memo(() => {
   const classes = useStyles();
   const [AddTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
-  const [todos, setTodos] = useState<{title:string,content:string}[]>([]);
+  const [todos, setTodos] = useState<{id:string, title:string,content:string}[]>([]);
 
   const handleClickOpen = () => {
     setAddTaskDialogIsOpen(true);
@@ -56,8 +56,9 @@ export const Home:React.VFC = memo(() => {
           <AddTaskButton handleClickOpen={handleClickOpen}/>
         </div>
         <div className={classes.todoListWrap}>
-          {todos.map((todo, index) => (
-            <div key={index} >
+          {todos.map((todo) => (
+            <div key={todo.id} >
+              <p>タスクID:{todo.id}</p>
               <p>タスク名：{todo.title}</p>
               <p>タスク内容：{todo.content}</p>
               <hr/>
