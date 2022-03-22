@@ -52,7 +52,7 @@ export const UpdateTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen
     console.log('todoId:', todoId)
     axios.
     put(`http://localhost:8080/todos/${todoId}`,
-    {Id: todoId, Title: title, Content: content},
+    {Id: Number(todoId), Title: title, Content: content},
     { headers: {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + authContext.jwt
                 }, 
