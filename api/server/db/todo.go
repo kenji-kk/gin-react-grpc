@@ -45,3 +45,13 @@ func GetTodos(userId int64) ([]Todo, error) {
 	}
 	return todos, nil
 }
+
+func (t *Todo) UpdateTodo () error {
+	cmd := `update todos set title = ?, content = ? where id = ?`
+	_, err := Db.Exec(cmd, t.Title, t.Content, t.Id)
+	if err != nil {
+		fmt.Printf("Todo更新時にエラーが起きました: %v\n", err)
+		return err
+	}
+	return nil
+}

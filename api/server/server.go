@@ -138,3 +138,21 @@ func (s *server) GetTodos(ctx context.Context, req *pb.GetTodosRequest) (*pb.Get
 		Todos: pTodos,
 	}, nil
 }
+
+func (s *server) UpdateTodo(ctx context.Context, req *pb.UpdateTodoRequest) (*pb.UpdateTodoResponse, error) {
+	todo := db.Todo{
+		Id: req.Todo.Id,
+		Title: req.Todo.Title,
+		Content: req.Todo.Content,
+	}
+	err := todo.UpdateTodo()
+	if err != nil {
+		return nil, err
+	}
+	returnTodo := &pb.Todo{
+		Id: todo.Id,
+		Title: todo.Title,
+		Content: todo.Content,
+	}
+	return &pb.UpdateTodoResponse{Todo: returnTodo}, nil
+}
