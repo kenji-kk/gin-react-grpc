@@ -9,6 +9,7 @@ service TodoService {
   rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse) {}
   rpc GetTodos(GetTodosRequest) returns (GetTodosResponse) {}
   rpc UpdateTodo(UpdateTodoRequest) returns (UpdateTodoResponse) {}
+  rpc DeleteTodo(DeleteTodoRequest) returns (DeleteTodoResponse) {}
 }
 
 message AddUserRequest {
@@ -84,3 +85,10 @@ message UpdateTodoRequest {
 message UpdateTodoResponse {
   Todo todo = 1;
 }
+
+//DeleteTodo
+message DeleteTodoRequest {
+  int64 todoId = 1;
+}
+
+message DeleteTodoResponse {}
