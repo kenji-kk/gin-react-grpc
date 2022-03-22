@@ -2,6 +2,7 @@ import './App.css';
 import { useState, useEffect, createContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom"
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { AuthPage } from './components/pages/AuthPage';
 import { Home } from './components/pages/Home';
 
@@ -35,12 +36,19 @@ function App() {
       if (isSignedIn) {
         return children
       } else {
-        return <Navigate to="/auth" />
+        if (Cookies.get("_access_token")) {
+          setJwt(Cookies.get("_access_token"))
+          setIsSignedIn(true)
+          return children
+        } else {
+          return <Navigate to="/auth" />
+        }
       }
     } else {
       return <></>
     }
   }
+
 
   return (
     <Router>

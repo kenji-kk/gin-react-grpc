@@ -2,6 +2,7 @@ import { useState, useContext, memo }from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../../App"
+import Cookies from 'js-cookie';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -40,6 +41,7 @@ export const SignInForms: React.VFC<PROPS> = memo(({setFormToggle}) => {
       setIsSignedIn(true)
       setJwt(response.data.jwt)
       console.log('jwtがセットされました:', jwt)
+      Cookies.set("_access_token", response.data.jwt)
       navigate('/')}
     )
   };
