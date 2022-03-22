@@ -9,6 +9,7 @@ import { AddTaskDialog } from '../organisms/AddTaskDialog';
 import axios from 'axios';
 import { UpdateTaskButton } from '../atoms/UpdateTaskButton';
 import { UpdateTaskDialog } from '../organisms/UpdateTaskDialog';
+import { DeleteTaskButton } from '../atoms/DeleteTaskButton';
 
 const useStyles = makeStyles({
   title: {
@@ -21,6 +22,12 @@ const useStyles = makeStyles({
     margin: '0 auto',
     width: '30vw',
   },
+  buttonsWrap: {
+    display: 'flex',
+  },
+  button: {
+    margin: '0 0 0 1vw',
+  }
 })
 
 export const Home:React.VFC = memo(() => {
@@ -77,7 +84,10 @@ export const Home:React.VFC = memo(() => {
               <p>タスクID:{todo.id}</p>
               <p>タスク名：{todo.title}</p>
               <p>タスク内容：{todo.content}</p>
-              <UpdateTaskButton handleClickOpen={handleClickUpdateOpen} todo={todo}/>
+              <div className={classes.buttonsWrap}>
+                <div><UpdateTaskButton handleClickOpen={handleClickUpdateOpen} todo={todo}/></div>
+                <div className={classes.button}><DeleteTaskButton /></div>
+              </div>
               <hr/>
             </div>
           ))}
