@@ -60,6 +60,7 @@ func main() {
 		{
 			authorized.GET("/todos", handler.GetTodos)
 			authorized.POST("/todos",handler.CreateTodo)
+			authorized.PATCH("/todos/:id",handler.UpdateTodo)
 		}
     r.Run()
 }

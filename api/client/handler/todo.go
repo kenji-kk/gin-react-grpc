@@ -83,3 +83,24 @@ func GetTodos(ctx *gin.Context) {
 		"data": todos,
 	})
 }
+
+func UpdateTodo(ctx *gin.Context) {
+	opts := grpc.WithInsecure()
+	cc, err := grpc.Dial("server:50051", opts)
+	CheckErr("could not connect: %v\n", err)
+	defer cc.Close()
+	c := pb.NewTodoServiceClient(cc)
+	
+	todo := new(lib.Todo)
+	if err := ctx.Bind(todo); err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+		return
+	}
+
+	pTodo := &pb.Todo{
+		Id: todo.Id,
+		Title: todo.Title,
+		Content: todo.Content,
+	}
+	returnTodo, err := c.UpdateTodo(context.Background(), &pb.UpdateTodoRequest{Todo: pTodo})
+}
