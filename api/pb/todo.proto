@@ -62,7 +62,9 @@ message CreateTodoRequest {
   Todo todo = 2;
 }
 
-message CreateTodoResponse {}
+message CreateTodoResponse {
+  Todo todo = 1;
+}
 
 // GetTodos
 message GetTodosRequest {
