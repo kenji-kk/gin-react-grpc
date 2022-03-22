@@ -25,7 +25,7 @@ func (t *Todo) CreateTodo() (int64, error) {
 }
 
 func GetTodos(userId int64) ([]Todo, error) {
-	cmd := `select title, content from todos where user_id = ?`
+	cmd := `select id, title, content from todos where user_id = ?`
 	rows, err := Db.Query(cmd, userId)
 	if err != nil {
 		fmt.Printf("GetTodosでエラーが起きました: %v\n", err)
@@ -36,7 +36,7 @@ func GetTodos(userId int64) ([]Todo, error) {
 	var todos []Todo
 	for rows.Next() {
 		var todo Todo
-		err := rows.Scan(&todo.Title, &todo.Content)
+		err := rows.Scan(&todo.Id, &todo.Title, &todo.Content)
 		if err != nil {
 			fmt.Printf("スキャン時にエラーが起きました: %v\n", err)
 			return nil, err

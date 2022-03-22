@@ -129,6 +129,7 @@ func (s *server) GetTodos(ctx context.Context, req *pb.GetTodosRequest) (*pb.Get
 	var pTodos []*pb.Todo
 	for _, todo := range todos {
 		pTodos = append(pTodos, &pb.Todo{
+			Id: todo.Id,
 			Title: todo.Title,
 			Content: todo.Content,
 		})
