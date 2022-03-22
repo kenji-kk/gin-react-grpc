@@ -9,6 +9,8 @@ import { AddTaskDialog } from '../organisms/AddTaskDialog';
 import axios from 'axios';
 import { UpdateTaskButton } from '../atoms/UpdateTaskButton';
 import { UpdateTaskDialog } from '../organisms/UpdateTaskDialog';
+import { DeleteTaskButton } from '../atoms/DeleteTaskButton';
+import { DeleteTaskDialog } from '../organisms/DeleteTaskDialog';
 
 const useStyles = makeStyles({
   title: {
@@ -21,12 +23,19 @@ const useStyles = makeStyles({
     margin: '0 auto',
     width: '30vw',
   },
+  buttonsWrap: {
+    display: 'flex',
+  },
+  button: {
+    margin: '0 0 0 1vw',
+  }
 })
 
 export const Home:React.VFC = memo(() => {
   const classes = useStyles();
   const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
   const [updateTaskDialogIsOpen, setUpdateTaskDialogIsOpen] = useState(false);
+  const [deleteTaskDialogIsOpen, setDeleteTaskDialogIsOpen] = useState(false);
   const [todos, setTodos] = useState<{id:string, title:string,content:string}[]>([]);
   const [currentTodoId, setCurrentTodoId] = useState("");
   const [currentTodoTitle, setCurrentTodoTitle] = useState("");
@@ -40,6 +49,12 @@ export const Home:React.VFC = memo(() => {
     setCurrentTodoTitle(todo.title);
     setCurrentTodoContent(todo.content);
     setUpdateTaskDialogIsOpen(true);
+  };
+  const handleClickDeleteOpen = (todo:any) => {
+    setCurrentTodoId(todo.id)
+    setCurrentTodoTitle(todo.title);
+    setCurrentTodoContent(todo.content);
+    setDeleteTaskDialogIsOpen(true);
   };
 
   const authContext = useContext(AuthContext);
@@ -77,12 +92,17 @@ export const Home:React.VFC = memo(() => {
               <p>タスクID:{todo.id}</p>
               <p>タスク名：{todo.title}</p>
               <p>タスク内容：{todo.content}</p>
-              <UpdateTaskButton handleClickOpen={handleClickUpdateOpen} todo={todo}/>
+              <div className={classes.buttonsWrap}>
+                <div><UpdateTaskButton handleClickOpen={handleClickUpdateOpen} todo={todo}/></div>
+                <div className={classes.button} ><DeleteTaskButton handleClickOpen={handleClickDeleteOpen} todo={todo}/></div>
+              </div>
               <hr/>
             </div>
           ))}
         </div>
+
         <UpdateTaskDialog dialogIsOpen={updateTaskDialogIsOpen} setDialogIsOpen={setUpdateTaskDialogIsOpen} todoId={currentTodoId} todoTitle={currentTodoTitle} todoContent={currentTodoContent} fetchTodos={fetchTodos}/>
+        <DeleteTaskDialog dialogIsOpen={deleteTaskDialogIsOpen} setDialogIsOpen={setDeleteTaskDialogIsOpen} todoId={currentTodoId} todoTitle={currentTodoTitle} todoContent={currentTodoContent} setTodos={setTodos}/>
       </Container>
   )
 })
