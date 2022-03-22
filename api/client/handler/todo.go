@@ -110,8 +110,9 @@ func UpdateTodo(ctx *gin.Context) {
 		return
 	}
 
+	returnTodo := map[string]string{"id": strconv.Itoa(int(receiveTodo.Todo.Id)), "title": receiveTodo.Todo.Title, "content": receiveTodo.Todo.Content}
 	ctx.JSON(http.StatusOK, gin.H{
 		"msg":  "Update todo successfully.",
-		"data": receiveTodo,
+		"data": returnTodo,
 	})
 }
