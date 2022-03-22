@@ -116,3 +116,30 @@ func UpdateTodo(ctx *gin.Context) {
 		"data": returnTodo,
 	})
 }
+
+func DeleteTodo(ctx *gin.Context) {
+	opts := grpc.WithInsecure()
+	cc, err := grpc.Dial("server:50051", opts)
+	CheckErr("could not connect: %v\n", err)
+	defer cc.Close()
+	c := pb.NewTodoServiceClient(cc)
+
+	paramID := ctx.Param("id")
+  id, err := strconv.Atoi(paramID)
+  if err != nil {
+    ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Not valid ID."})
+    return
+  }
+
+
+	_, err = c.DeleteTodo(context.Background(), &pb.DeleteTodoRequest{TodoId: int64(id)})
+	if err != nil {
+		fmt.Printf("DeleteTodoハンドラでエラーがありました: %v\n", err)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "Delete todo successfully.",
+	})
+}
