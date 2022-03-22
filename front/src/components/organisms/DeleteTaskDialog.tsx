@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../../App';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import TextField from '@mui/material/TextField';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
@@ -16,7 +18,7 @@ interface Props {
   todoId: string;
   todoTitle: string;
   todoContent: string;
-  fetchTodos: () => Promise<void>
+  setTodos: (value: any) => void;
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -28,13 +30,38 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const DeleteTaskDialog:React.VFC<Props> = ({setDialogIsOpen, dialogIsOpen, todoId, todoTitle, todoContent}) => {
+export const DeleteTaskDialog:React.VFC<Props> = ({setDialogIsOpen, dialogIsOpen, todoId, todoTitle, todoContent, setTodos}) => {
   const handleClose = () => {
     setDialogIsOpen(false);
   };
 
+  const authContext = useContext(AuthContext);
+
+
   const [title, setTitle] = useState(todoTitle)
   const [content, setContent] = useState(todoContent)
+
+  const handleSubmit = async () => {
+    console.log('todoId:', todoId)
+    axios.
+    delete(`http://localhost:8080/todos/${todoId}`,
+    { headers: {'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + authContext.jwt
+                }, 
+      responseType: 'json' 
+    }
+    )
+    .then(response => {
+      console.log('response body:', response.data.data)
+      setTodos((prevState:{titile:string,content:string,id:string}[]) => {
+        return prevState.filter(todo => { return todo.id !== todoId; })
+      })
+      handleClose()
+      setTitle("")
+      setContent("")
+    }
+    )
+    }
 
   useEffect(() => {
     console.log('todoId:', todoId)
@@ -51,7 +78,7 @@ export const DeleteTaskDialog:React.VFC<Props> = ({setDialogIsOpen, dialogIsOpen
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>このタスクを削除しますか。</DialogTitle>
+        <DialogTitle>このタスクを削除しますか？</DialogTitle>
         <DialogContent>
             <TextField
               autoFocus
@@ -88,7 +115,7 @@ export const DeleteTaskDialog:React.VFC<Props> = ({setDialogIsOpen, dialogIsOpen
           </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>キャンセル</Button>
-          <Button onClick={handleClose}>削除</Button>
+          <Button onClick={handleSubmit}>削除</Button>
         </DialogActions>
       </Dialog>
     </div>

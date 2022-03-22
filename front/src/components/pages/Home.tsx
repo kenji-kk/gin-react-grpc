@@ -102,7 +102,7 @@ export const Home:React.VFC = memo(() => {
         </div>
 
         <UpdateTaskDialog dialogIsOpen={updateTaskDialogIsOpen} setDialogIsOpen={setUpdateTaskDialogIsOpen} todoId={currentTodoId} todoTitle={currentTodoTitle} todoContent={currentTodoContent} fetchTodos={fetchTodos}/>
-        <DeleteTaskDialog dialogIsOpen={deleteTaskDialogIsOpen} setDialogIsOpen={setDeleteTaskDialogIsOpen} todoId={currentTodoId} todoTitle={currentTodoTitle} todoContent={currentTodoContent} fetchTodos={fetchTodos}/>
+        <DeleteTaskDialog dialogIsOpen={deleteTaskDialogIsOpen} setDialogIsOpen={setDeleteTaskDialogIsOpen} todoId={currentTodoId} todoTitle={currentTodoTitle} todoContent={currentTodoContent} setTodos={setTodos}/>
       </Container>
   )
 })
