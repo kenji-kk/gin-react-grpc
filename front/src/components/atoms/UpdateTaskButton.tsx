@@ -3,11 +3,12 @@ import Button from '@mui/material/Button';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 interface Props {
-  handleClickOpen: () => void;
+  handleClickOpen: any;
+  todo: any;
 }
 
-export const UpdateTaskButton:React.VFC<Props> = memo(({handleClickOpen}) => {
+export const UpdateTaskButton:React.VFC<Props> = memo(({handleClickOpen, todo}) => {
   return (
-    <Button onClick={handleClickOpen} variant="contained" color="success" endIcon={<SettingsIcon />}>修正</Button>
+    <Button onClick={() => {handleClickOpen(todo)}} variant="contained" color="success" endIcon={<SettingsIcon />}>修正</Button>
   )
 })

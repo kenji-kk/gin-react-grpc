@@ -28,11 +28,15 @@ export const Home:React.VFC = memo(() => {
   const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
   const [updateTaskDialogIsOpen, setUpdateTaskDialogIsOpen] = useState(false);
   const [todos, setTodos] = useState<{id:string, title:string,content:string}[]>([]);
+  const [currentTodoTitle, setCurrentTodoTitle] = useState("");
+  const [currentTodoContent, setCurrentTodoContent] = useState("");
 
   const handleClickAddOpen = () => {
     setAddTaskDialogIsOpen(true);
   };
-  const handleClickUpdateOpen = () => {
+  const handleClickUpdateOpen = (todo:any) => {
+    setCurrentTodoTitle(todo.title);
+    setCurrentTodoContent(todo.content);
     setUpdateTaskDialogIsOpen(true);
   };
 
@@ -55,11 +59,11 @@ export const Home:React.VFC = memo(() => {
   },[])
 
   return (
-    <>
       <Container>
         <h1 className={classes.title}>TODOアプリ</h1>
         <div className={classes.buttonWrap}>
           <AddTaskButton handleClickOpen={handleClickAddOpen}/>
+          <AddTaskDialog dialogIsOpen={addTaskDialogIsOpen} setDialogIsOpen={setAddTaskDialogIsOpen} setTodos={setTodos}/>
         </div>
         <div className={classes.todoListWrap}>
           {todos.map((todo) => (
@@ -67,15 +71,12 @@ export const Home:React.VFC = memo(() => {
               <p>タスクID:{todo.id}</p>
               <p>タスク名：{todo.title}</p>
               <p>タスク内容：{todo.content}</p>
-              <UpdateTaskButton handleClickOpen={handleClickUpdateOpen}/>
+              <UpdateTaskButton handleClickOpen={handleClickUpdateOpen} todo={todo}/>
               <hr/>
             </div>
           ))}
         </div>
+        <UpdateTaskDialog dialogIsOpen={updateTaskDialogIsOpen} setDialogIsOpen={setUpdateTaskDialogIsOpen} todoTitle={currentTodoTitle} todoContent={currentTodoContent}/>
       </Container>
-
-      <AddTaskDialog dialogIsOpen={addTaskDialogIsOpen} setDialogIsOpen={setAddTaskDialogIsOpen} setTodos={setTodos}/>
-      <UpdateTaskDialog dialogIsOpen={updateTaskDialogIsOpen} setDialogIsOpen={setUpdateTaskDialogIsOpen}/>
-    </>
   )
 })

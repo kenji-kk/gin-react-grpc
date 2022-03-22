@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 import { AuthContext } from '../../App';
@@ -14,6 +14,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface Props {
   dialogIsOpen: boolean;
   setDialogIsOpen: (value: boolean) => void;
+  todoTitle: string;
+  todoContent: string;
 }
 
 const useStyles = makeStyles({
@@ -25,15 +27,21 @@ const useStyles = makeStyles({
   }
 })
 
-export const UpdateTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen}) =>{
+export const UpdateTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, todoTitle, todoContent}) =>{
   const classes = useStyles();
-  const [title, setTitle] = useState("")
-  const [content, setContent] = useState("")
+  const [title, setTitle] = useState(todoTitle)
+  const [content, setContent] = useState(todoContent)
 
   const authContext = useContext(AuthContext);
 
+  useEffect(() => {
+    setTitle(todoTitle)
+    setContent(todoContent)
+  }, [todoTitle, todoContent])
 
   const handleClose = () => {
+    setTitle(todoTitle)
+    setContent(todoContent)
     setDialogIsOpen(false);
   };
 
