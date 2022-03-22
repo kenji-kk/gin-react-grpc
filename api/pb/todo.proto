@@ -8,6 +8,7 @@ service TodoService {
   rpc GetUserById(GetUserByIdRequest) returns (GetUserByIdResponse) {}
   rpc CreateTodo(CreateTodoRequest) returns (CreateTodoResponse) {}
   rpc GetTodos(GetTodosRequest) returns (GetTodosResponse) {}
+  rpc UpdateTodo(UpdateTodoRequest) returns (UpdateTodoResponse) {}
 }
 
 message AddUserRequest {
@@ -73,4 +74,13 @@ message GetTodosRequest {
 
 message GetTodosResponse {
   repeated Todo todos = 1;
+}
+
+//UpdateTodo
+message UpdateTodoRequest {
+  Todo todo = 1;
+}
+
+message UpdateTodoResponse {
+  Todo todo = 1;
 }
