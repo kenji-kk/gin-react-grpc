@@ -9,18 +9,23 @@ type Todo struct {
 	UserId int64
 }
 
-func (t *Todo) CreateTodo() error {
+func (t *Todo) CreateTodo() (int64, error) {
 	cmd := `insert into todos (title, content, user_id) values (?, ?, ?)`
-	_, err := Db.Exec(cmd, t.Title, t.Content, t.UserId)
+	ins, err := Db.Exec(cmd, t.Title, t.Content, t.UserId)
 	if err != nil {
 		fmt.Printf("Todo追加時にエラーが起きました: %v\n", err)
-		return err
+		return 0, err
 	}
-	return nil
+	id, err := ins.LastInsertId()
+	if err != nil {
+		fmt.Printf("最終行のidを取得するときにエラーが起きました。: %v\n", err)
+		return 0, err
+	}
+	return id, nil
 }
 
 func GetTodos(userId int64) ([]Todo, error) {
-	cmd := `select title, content from todos where user_id = ?`
+	cmd := `select id, title, content from todos where user_id = ?`
 	rows, err := Db.Query(cmd, userId)
 	if err != nil {
 		fmt.Printf("GetTodosでエラーが起きました: %v\n", err)
@@ -31,7 +36,7 @@ func GetTodos(userId int64) ([]Todo, error) {
 	var todos []Todo
 	for rows.Next() {
 		var todo Todo
-		err := rows.Scan(&todo.Title, &todo.Content)
+		err := rows.Scan(&todo.Id, &todo.Title, &todo.Content)
 		if err != nil {
 			fmt.Printf("スキャン時にエラーが起きました: %v\n", err)
 			return nil, err
