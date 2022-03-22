@@ -14,7 +14,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface Props {
   dialogIsOpen: boolean;
   setDialogIsOpen: (value: boolean) => void;
-  setTodos: any
 }
 
 const useStyles = makeStyles({
@@ -26,7 +25,7 @@ const useStyles = makeStyles({
   }
 })
 
-export const AddTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, setTodos}) =>{
+export const UpdateTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen}) =>{
   const classes = useStyles();
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
@@ -50,7 +49,6 @@ export const AddTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, s
     )
     .then(response => {
       console.log('response body:', response.data.data)
-      setTodos((prevTodos:any) => [...prevTodos, response.data.data])
       handleClose()
       setTitle("")
       setContent("")
@@ -62,7 +60,7 @@ export const AddTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, s
     <div>
         <Dialog open={dialogIsOpen} onClose={handleClose}>
           <div className={classes.dummy}></div>
-          <DialogTitle className={classes.title}>タスク作成フォーム</DialogTitle>
+          <DialogTitle className={classes.title}>タスク修正フォーム</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
@@ -93,7 +91,7 @@ export const AddTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, s
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>閉じる</Button>
-            <Button onClick={handleSubmit}>作成</Button>
+            <Button onClick={handleSubmit}>更新</Button>
           </DialogActions>
         </Dialog>
     </div>

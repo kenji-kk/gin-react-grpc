@@ -7,6 +7,8 @@ import { AuthContext } from '../../App';
 import { AddTaskButton } from '../atoms/AddTaskButton';
 import { AddTaskDialog } from '../organisms/AddTaskDialog';
 import axios from 'axios';
+import { UpdateTaskButton } from '../atoms/UpdateTaskButton';
+import { UpdateTaskDialog } from '../organisms/UpdateTaskDialog';
 
 const useStyles = makeStyles({
   title: {
@@ -23,11 +25,15 @@ const useStyles = makeStyles({
 
 export const Home:React.VFC = memo(() => {
   const classes = useStyles();
-  const [AddTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
+  const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
+  const [updateTaskDialogIsOpen, setUpdateTaskDialogIsOpen] = useState(false);
   const [todos, setTodos] = useState<{id:string, title:string,content:string}[]>([]);
 
-  const handleClickOpen = () => {
+  const handleClickAddOpen = () => {
     setAddTaskDialogIsOpen(true);
+  };
+  const handleClickUpdateOpen = () => {
+    setUpdateTaskDialogIsOpen(true);
   };
 
   const authContext = useContext(AuthContext);
@@ -53,7 +59,7 @@ export const Home:React.VFC = memo(() => {
       <Container>
         <h1 className={classes.title}>TODOアプリ</h1>
         <div className={classes.buttonWrap}>
-          <AddTaskButton handleClickOpen={handleClickOpen}/>
+          <AddTaskButton handleClickOpen={handleClickAddOpen}/>
         </div>
         <div className={classes.todoListWrap}>
           {todos.map((todo) => (
@@ -61,13 +67,15 @@ export const Home:React.VFC = memo(() => {
               <p>タスクID:{todo.id}</p>
               <p>タスク名：{todo.title}</p>
               <p>タスク内容：{todo.content}</p>
+              <UpdateTaskButton handleClickOpen={handleClickUpdateOpen}/>
               <hr/>
             </div>
           ))}
         </div>
       </Container>
 
-      <AddTaskDialog AddTaskDialogIsOpen={AddTaskDialogIsOpen} setAddTaskDialogIsOpen={setAddTaskDialogIsOpen} setTodos={setTodos}/>
+      <AddTaskDialog dialogIsOpen={addTaskDialogIsOpen} setDialogIsOpen={setAddTaskDialogIsOpen} setTodos={setTodos}/>
+      <UpdateTaskDialog dialogIsOpen={updateTaskDialogIsOpen} setDialogIsOpen={setUpdateTaskDialogIsOpen}/>
     </>
   )
 })
