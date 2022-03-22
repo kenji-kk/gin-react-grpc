@@ -43,7 +43,7 @@ func CreateTodo(ctx *gin.Context){
 		Content: todo.Content,
 	}
 
-	getTodo, err := c.CreateTodo(context.Background(), &pb.CreateTodoRequest{User: pUser, Todo: pTodo})
+	receiveTodo, err := c.CreateTodo(context.Background(), &pb.CreateTodoRequest{User: pUser, Todo: pTodo})
 	if err != nil {
     fmt.Printf("CreateTodoハンドラでエラーがありました: %v\n", err)
     ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
@@ -51,7 +51,7 @@ func CreateTodo(ctx *gin.Context){
   }
 
 	//React側ではkeyの頭文字を小文字で扱うので小文字に変換
-	returnTodo := map[string]string{"id": strconv.Itoa(int(getTodo.Todo.Id)),"title": todo.Title, "content": todo.Content}
+	returnTodo := map[string]string{"id": strconv.Itoa(int(receiveTodo.Todo.Id)),"title": todo.Title, "content": todo.Content}
 	ctx.JSON(http.StatusOK, gin.H{
     "msg":  "Post created successfully.",
     "data": returnTodo,
@@ -102,5 +102,16 @@ func UpdateTodo(ctx *gin.Context) {
 		Title: todo.Title,
 		Content: todo.Content,
 	}
-	returnTodo, err := c.UpdateTodo(context.Background(), &pb.UpdateTodoRequest{Todo: pTodo})
+
+	receiveTodo, err := c.UpdateTodo(context.Background(), &pb.UpdateTodoRequest{Todo: pTodo})
+	if err != nil {
+		fmt.Printf("UpdateTodoハンドラでエラーがありました: %v\n", err)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg":  "Update todo successfully.",
+		"data": receiveTodo,
+	})
 }
