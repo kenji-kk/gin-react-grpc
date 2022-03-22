@@ -28,6 +28,7 @@ export const Home:React.VFC = memo(() => {
   const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
   const [updateTaskDialogIsOpen, setUpdateTaskDialogIsOpen] = useState(false);
   const [todos, setTodos] = useState<{id:string, title:string,content:string}[]>([]);
+  const [currentTodoId, setCurrentTodoId] = useState("");
   const [currentTodoTitle, setCurrentTodoTitle] = useState("");
   const [currentTodoContent, setCurrentTodoContent] = useState("");
 
@@ -35,14 +36,15 @@ export const Home:React.VFC = memo(() => {
     setAddTaskDialogIsOpen(true);
   };
   const handleClickUpdateOpen = (todo:any) => {
+    setCurrentTodoId(todo.id)
     setCurrentTodoTitle(todo.title);
     setCurrentTodoContent(todo.content);
     setUpdateTaskDialogIsOpen(true);
   };
 
   const authContext = useContext(AuthContext);
-
-  useEffect(() => {
+  
+  const fetchTodos = async () => {
     axios
     .get('http://localhost:8080/todos',
     { headers: {'Content-Type': 'application/json',
@@ -56,6 +58,10 @@ export const Home:React.VFC = memo(() => {
         setTodos(response.data.data.todos)
       }
     })
+  }
+
+  useEffect(() => {
+    fetchTodos()
   },[])
 
   return (
@@ -76,7 +82,7 @@ export const Home:React.VFC = memo(() => {
             </div>
           ))}
         </div>
-        <UpdateTaskDialog dialogIsOpen={updateTaskDialogIsOpen} setDialogIsOpen={setUpdateTaskDialogIsOpen} todoTitle={currentTodoTitle} todoContent={currentTodoContent}/>
+        <UpdateTaskDialog dialogIsOpen={updateTaskDialogIsOpen} setDialogIsOpen={setUpdateTaskDialogIsOpen} todoId={currentTodoId} todoTitle={currentTodoTitle} todoContent={currentTodoContent} fetchTodos={fetchTodos}/>
       </Container>
   )
 })

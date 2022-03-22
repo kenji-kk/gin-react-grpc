@@ -14,8 +14,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface Props {
   dialogIsOpen: boolean;
   setDialogIsOpen: (value: boolean) => void;
+  todoId: string;
   todoTitle: string;
   todoContent: string;
+  fetchTodos: () => Promise<void>
 }
 
 const useStyles = makeStyles({
@@ -27,7 +29,7 @@ const useStyles = makeStyles({
   }
 })
 
-export const UpdateTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, todoTitle, todoContent}) =>{
+export const UpdateTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, todoId, todoTitle, todoContent, fetchTodos}) =>{
   const classes = useStyles();
   const [title, setTitle] = useState(todoTitle)
   const [content, setContent] = useState(todoContent)
@@ -35,6 +37,7 @@ export const UpdateTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen
   const authContext = useContext(AuthContext);
 
   useEffect(() => {
+    console.log('todoId:', todoId)
     setTitle(todoTitle)
     setContent(todoContent)
   }, [todoTitle, todoContent])
@@ -46,9 +49,10 @@ export const UpdateTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen
   };
 
   const handleSubmit = async () => {
+    console.log('todoId:', todoId)
     axios.
-    post('http://localhost:8080/todos',
-    {Title: title, Content: content},
+    put(`http://localhost:8080/todos/${todoId}`,
+    {Id: todoId, Title: title, Content: content},
     { headers: {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + authContext.jwt
                 }, 
@@ -57,6 +61,7 @@ export const UpdateTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen
     )
     .then(response => {
       console.log('response body:', response.data.data)
+      fetchTodos()
       handleClose()
       setTitle("")
       setContent("")
