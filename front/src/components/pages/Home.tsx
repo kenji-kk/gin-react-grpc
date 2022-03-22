@@ -18,7 +18,9 @@ const useStyles = makeStyles({
     textAlign: 'center',
   },
   signoutWrap: {
-    textAlign: 'right',
+    position: 'fixed',
+    right: '5vw',
+    top: '11vh',
   },
   buttonWrap: {
     textAlign: 'center',
@@ -35,7 +37,8 @@ const useStyles = makeStyles({
   },
   fixAddbutton:{
     position: 'fixed',
-    right: '25vw',
+    right: '18vw',
+    top: '12vh',
   }
 })
 
