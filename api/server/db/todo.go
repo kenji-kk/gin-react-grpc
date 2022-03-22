@@ -46,7 +46,7 @@ func GetTodos(userId int64) ([]Todo, error) {
 	return todos, nil
 }
 
-func (t *Todo) UpdateTodo () error {
+func (t *Todo) UpdateTodo() error {
 	cmd := `update todos set title = ?, content = ? where id = ?`
 	_, err := Db.Exec(cmd, t.Title, t.Content, t.Id)
 	if err != nil {

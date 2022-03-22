@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 import { AuthContext } from '../../App';
@@ -14,7 +14,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface Props {
   dialogIsOpen: boolean;
   setDialogIsOpen: (value: boolean) => void;
-  setTodos: any
+  todoId: string;
+  todoTitle: string;
+  todoContent: string;
+  fetchTodos: () => Promise<void>
 }
 
 const useStyles = makeStyles({
@@ -26,22 +29,30 @@ const useStyles = makeStyles({
   }
 })
 
-export const AddTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, setTodos}) =>{
+export const UpdateTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, todoId, todoTitle, todoContent, fetchTodos}) =>{
   const classes = useStyles();
-  const [title, setTitle] = useState("")
-  const [content, setContent] = useState("")
+  const [title, setTitle] = useState(todoTitle)
+  const [content, setContent] = useState(todoContent)
 
   const authContext = useContext(AuthContext);
 
+  useEffect(() => {
+    console.log('todoId:', todoId)
+    setTitle(todoTitle)
+    setContent(todoContent)
+  }, [todoTitle, todoContent])
 
   const handleClose = () => {
+    setTitle(todoTitle)
+    setContent(todoContent)
     setDialogIsOpen(false);
   };
 
   const handleSubmit = async () => {
+    console.log('todoId:', todoId)
     axios.
-    post('http://localhost:8080/todos',
-    {Title: title, Content: content},
+    put(`http://localhost:8080/todos/${todoId}`,
+    {Id: todoId, Title: title, Content: content},
     { headers: {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + authContext.jwt
                 }, 
@@ -50,7 +61,7 @@ export const AddTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, s
     )
     .then(response => {
       console.log('response body:', response.data.data)
-      setTodos((prevTodos:any) => [...prevTodos, response.data.data])
+      fetchTodos()
       handleClose()
       setTitle("")
       setContent("")
@@ -62,7 +73,7 @@ export const AddTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, s
     <div>
         <Dialog open={dialogIsOpen} onClose={handleClose}>
           <div className={classes.dummy}></div>
-          <DialogTitle className={classes.title}>タスク作成フォーム</DialogTitle>
+          <DialogTitle className={classes.title}>タスク修正フォーム</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
@@ -93,7 +104,7 @@ export const AddTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, s
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>閉じる</Button>
-            <Button onClick={handleSubmit}>作成</Button>
+            <Button onClick={handleSubmit}>更新</Button>
           </DialogActions>
         </Dialog>
     </div>

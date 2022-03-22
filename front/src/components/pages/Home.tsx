@@ -7,6 +7,8 @@ import { AuthContext } from '../../App';
 import { AddTaskButton } from '../atoms/AddTaskButton';
 import { AddTaskDialog } from '../organisms/AddTaskDialog';
 import axios from 'axios';
+import { UpdateTaskButton } from '../atoms/UpdateTaskButton';
+import { UpdateTaskDialog } from '../organisms/UpdateTaskDialog';
 
 const useStyles = makeStyles({
   title: {
@@ -23,16 +25,26 @@ const useStyles = makeStyles({
 
 export const Home:React.VFC = memo(() => {
   const classes = useStyles();
-  const [AddTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
+  const [addTaskDialogIsOpen, setAddTaskDialogIsOpen] = useState(false);
+  const [updateTaskDialogIsOpen, setUpdateTaskDialogIsOpen] = useState(false);
   const [todos, setTodos] = useState<{id:string, title:string,content:string}[]>([]);
+  const [currentTodoId, setCurrentTodoId] = useState("");
+  const [currentTodoTitle, setCurrentTodoTitle] = useState("");
+  const [currentTodoContent, setCurrentTodoContent] = useState("");
 
-  const handleClickOpen = () => {
+  const handleClickAddOpen = () => {
     setAddTaskDialogIsOpen(true);
+  };
+  const handleClickUpdateOpen = (todo:any) => {
+    setCurrentTodoId(todo.id)
+    setCurrentTodoTitle(todo.title);
+    setCurrentTodoContent(todo.content);
+    setUpdateTaskDialogIsOpen(true);
   };
 
   const authContext = useContext(AuthContext);
-
-  useEffect(() => {
+  
+  const fetchTodos = async () => {
     axios
     .get('http://localhost:8080/todos',
     { headers: {'Content-Type': 'application/json',
@@ -46,14 +58,18 @@ export const Home:React.VFC = memo(() => {
         setTodos(response.data.data.todos)
       }
     })
+  }
+
+  useEffect(() => {
+    fetchTodos()
   },[])
 
   return (
-    <>
       <Container>
         <h1 className={classes.title}>TODOアプリ</h1>
         <div className={classes.buttonWrap}>
-          <AddTaskButton handleClickOpen={handleClickOpen}/>
+          <AddTaskButton handleClickOpen={handleClickAddOpen}/>
+          <AddTaskDialog dialogIsOpen={addTaskDialogIsOpen} setDialogIsOpen={setAddTaskDialogIsOpen} setTodos={setTodos}/>
         </div>
         <div className={classes.todoListWrap}>
           {todos.map((todo) => (
@@ -61,13 +77,12 @@ export const Home:React.VFC = memo(() => {
               <p>タスクID:{todo.id}</p>
               <p>タスク名：{todo.title}</p>
               <p>タスク内容：{todo.content}</p>
+              <UpdateTaskButton handleClickOpen={handleClickUpdateOpen} todo={todo}/>
               <hr/>
             </div>
           ))}
         </div>
+        <UpdateTaskDialog dialogIsOpen={updateTaskDialogIsOpen} setDialogIsOpen={setUpdateTaskDialogIsOpen} todoId={currentTodoId} todoTitle={currentTodoTitle} todoContent={currentTodoContent} fetchTodos={fetchTodos}/>
       </Container>
-
-      <AddTaskDialog AddTaskDialogIsOpen={AddTaskDialogIsOpen} setAddTaskDialogIsOpen={setAddTaskDialogIsOpen} setTodos={setTodos}/>
-    </>
   )
 })
