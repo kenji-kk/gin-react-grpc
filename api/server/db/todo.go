@@ -55,3 +55,13 @@ func (t *Todo) UpdateTodo() error {
 	}
 	return nil
 }
+
+func (t *Todo) DeleteTodo() error {
+	cmd := `delete from todos where id = ?`
+	_, err := Db.Exec(cmd, t.Id)
+	if err != nil {
+		fmt.Printf("Todo削除時にエラーが起きました: %v\n", err)
+		return err
+	}
+	return nil
+}

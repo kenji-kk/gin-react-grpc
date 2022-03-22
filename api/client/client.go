@@ -61,6 +61,7 @@ func main() {
 			authorized.GET("/todos", handler.GetTodos)
 			authorized.POST("/todos",handler.CreateTodo)
 			authorized.PUT("/todos/:id",handler.UpdateTodo)
+			authorized.DELETE("/todos/:id",handler.DeleteTodo)
 		}
     r.Run()
 }

@@ -156,3 +156,14 @@ func (s *server) UpdateTodo(ctx context.Context, req *pb.UpdateTodoRequest) (*pb
 	}
 	return &pb.UpdateTodoResponse{Todo: returnTodo}, nil
 }
+
+func (s *server) DeleteTodo(ctx context.Context, req *pb.DeleteTodoRequest) (*pb.DeleteTodoResponse, error) {
+	todo := db.Todo{
+		Id: req.TodoId,
+	}
+	err := todo.DeleteTodo()
+	if err != nil {
+		return nil, err
+	}
+	return &pb.DeleteTodoResponse{}, nil
+}
