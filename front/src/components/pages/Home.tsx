@@ -11,10 +11,14 @@ import { UpdateTaskButton } from '../atoms/UpdateTaskButton';
 import { UpdateTaskDialog } from '../organisms/UpdateTaskDialog';
 import { DeleteTaskButton } from '../atoms/DeleteTaskButton';
 import { DeleteTaskDialog } from '../organisms/DeleteTaskDialog';
+import { SignoutButton } from '../atoms/SignoutButton';
 
 const useStyles = makeStyles({
   title: {
     textAlign: 'center',
+  },
+  signoutWrap: {
+    textAlign: 'right',
   },
   buttonWrap: {
     textAlign: 'center',
@@ -82,6 +86,7 @@ export const Home:React.VFC = memo(() => {
   return (
       <Container>
         <h1 className={classes.title}>TODOアプリ</h1>
+        <div className={classes.signoutWrap}><SignoutButton /></div>
         <div className={classes.buttonWrap}>
           <AddTaskButton handleClickOpen={handleClickAddOpen}/>
           <AddTaskDialog dialogIsOpen={addTaskDialogIsOpen} setDialogIsOpen={setAddTaskDialogIsOpen} setTodos={setTodos}/>
