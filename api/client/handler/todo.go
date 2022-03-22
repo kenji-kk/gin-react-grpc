@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strconv"
 	"todo/client/jwt"
 	"todo/client/lib"
 	"todo/pb"
@@ -42,7 +43,7 @@ func CreateTodo(ctx *gin.Context){
 		Content: todo.Content,
 	}
 
-	_, err = c.CreateTodo(context.Background(), &pb.CreateTodoRequest{User: pUser, Todo: pTodo})
+	getTodo, err := c.CreateTodo(context.Background(), &pb.CreateTodoRequest{User: pUser, Todo: pTodo})
 	if err != nil {
     fmt.Printf("CreateTodoハンドラでエラーがありました: %v\n", err)
     ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
@@ -50,7 +51,7 @@ func CreateTodo(ctx *gin.Context){
   }
 
 	//React側ではkeyの頭文字を小文字で扱うので小文字に変換
-	returnTodo := map[string]string{"title": todo.Title, "content": todo.Content}
+	returnTodo := map[string]string{"id": strconv.Itoa(int(getTodo.Todo.Id)),"title": todo.Title, "content": todo.Content}
 	ctx.JSON(http.StatusOK, gin.H{
     "msg":  "Post created successfully.",
     "data": returnTodo,
