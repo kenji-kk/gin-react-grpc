@@ -98,7 +98,6 @@ export const Home:React.VFC = memo(() => {
         <div className={classes.todoListWrap}>
           {todos.map((todo) => (
             <div key={todo.id} >
-              <p>タスクID:{todo.id}</p>
               <p>タスク名：{todo.title}</p>
               <p>タスク内容：{todo.content}</p>
               <div className={classes.buttonsWrap}>
