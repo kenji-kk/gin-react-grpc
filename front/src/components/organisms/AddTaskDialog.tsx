@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, memo } from 'react';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 import { AuthContext } from '../../App';
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   }
 })
 
-export const AddTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, setTodos}) =>{
+export const AddTaskDialog:React.VFC<Props> = memo(({dialogIsOpen, setDialogIsOpen, setTodos}) =>{
   const classes = useStyles();
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
@@ -98,4 +98,4 @@ export const AddTaskDialog:React.VFC<Props> = ({dialogIsOpen, setDialogIsOpen, s
         </Dialog>
     </div>
   );
-}
+})

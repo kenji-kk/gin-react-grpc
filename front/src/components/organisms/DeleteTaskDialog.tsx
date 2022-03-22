@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, memo } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../../App';
 
@@ -30,7 +30,7 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export const DeleteTaskDialog:React.VFC<Props> = ({setDialogIsOpen, dialogIsOpen, todoId, todoTitle, todoContent, setTodos}) => {
+export const DeleteTaskDialog:React.VFC<Props> = memo(({setDialogIsOpen, dialogIsOpen, todoId, todoTitle, todoContent, setTodos}) => {
   const handleClose = () => {
     setDialogIsOpen(false);
   };
@@ -120,4 +120,4 @@ export const DeleteTaskDialog:React.VFC<Props> = ({setDialogIsOpen, dialogIsOpen
       </Dialog>
     </div>
   );
-}
+})
