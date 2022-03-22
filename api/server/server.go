@@ -105,12 +105,17 @@ func (s *server) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb
 		UserId: req.User.Id,
 	}
 
-	err := todo.CreateTodo()
+	id, err := todo.CreateTodo()
 	if err != nil {
 		return nil, err
 	}
+	returnTodo := &pb.Todo{
+		Id: id,
+		Title: todo.Title,
+		Content: todo.Content,
+	}
 
-	return &pb.CreateTodoResponse{}, nil
+	return &pb.CreateTodoResponse{Todo: returnTodo}, nil
 
 }
 
