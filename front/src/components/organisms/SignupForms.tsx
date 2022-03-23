@@ -3,6 +3,9 @@ import { AuthContext } from "../../App"
 import { useNavigate } from "react-router-dom"
 import Cookies from 'js-cookie';
 import client from '../../api/client';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -20,22 +23,53 @@ interface PROPS {
   setFormToggle: (value: boolean) => void;
 }
 
-const theme = createTheme();
+interface FormInputType {
+  email: string
+  userName: string
+  password: string
+}
 
-export const SignUpForms:React.VFC<PROPS> = memo(({setFormToggle}) =>{
-  const [name, setName] = useState('');
+const schema = yup.object({
+  email: yup
+    .string()
+    .required('必須項目です')
+    .email('正しいメールアドレス入力してね')
+    .min(5,"5文字以上で入力してください")
+    .max(100,"100文字以下で入力してください"),
+  userName: yup
+    .string()
+    .required('必須項目です')
+    .min(5,"5文字以上で入力してください")
+    .max(30,"30文字以下で入力してください"),
+  password: yup
+    .string()
+    .required('必須項目です')
+    .min(7,"7文字以上で入力してください")
+    .max(32,"30文字以下で入力してください")
+})
+
+export const SignUpForms: React.VFC<PROPS> = memo(({setFormToggle}) => {
   const [email, setEmail] = useState('');
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
   const { setIsSignedIn, setCurrentUser, setJwt, jwt } = useContext(AuthContext)
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInputType>({
+    resolver: yupResolver(schema),
+  })
+
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const onSubmit: SubmitHandler<FormInputType> = async (data) => {
+    console.log('data:', data)
     client
     .post('signup',
-    {UserName: name, Email: email, Password: password},
+    {UserName: userName, Email: email, Password: password},
     { headers: {'Content-Type': 'application/json'}, responseType: 'json' }
     )
     .then(response => {
@@ -46,7 +80,10 @@ export const SignUpForms:React.VFC<PROPS> = memo(({setFormToggle}) =>{
       Cookies.set("_access_token", response.data.jwt)
       navigate('/')
     });
-  };
+  }
+
+const theme = createTheme();
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -66,20 +103,22 @@ export const SignUpForms:React.VFC<PROPS> = memo(({setFormToggle}) =>{
           <Typography component="h1" variant="h5">
             新規登録
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="UserName"
                   required
                   fullWidth
-                  id="UserName"
+                  id="userName"
                   label="ユーザ名"
                   autoFocus
-                  value={name}
+                  {...register('userName')}
+                  error={"userName" in errors}
+                  helperText={errors.userName?.message}
+                  value={userName}
                   onChange={(event) => {
-                    setName(event.target.value);
+                    setUserName(event.target.value);
                   }}
                 />
               </Grid>
@@ -89,7 +128,9 @@ export const SignUpForms:React.VFC<PROPS> = memo(({setFormToggle}) =>{
                   fullWidth
                   id="email"
                   label="メールアドレス"
-                  name="email"
+                  {...register('email')}
+                  error={"email" in errors}
+                  helperText={errors.email?.message}
                   autoComplete="email"
                   value={email}
                   onChange={(event) => {
@@ -101,7 +142,9 @@ export const SignUpForms:React.VFC<PROPS> = memo(({setFormToggle}) =>{
                 <TextField
                   required
                   fullWidth
-                  name="password"
+                  {...register('password')}
+                  error={"password" in errors}
+                  helperText={errors.password?.message}
                   label="パスワード"
                   type="password"
                   id="password"
@@ -118,6 +161,7 @@ export const SignUpForms:React.VFC<PROPS> = memo(({setFormToggle}) =>{
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleSubmit(onSubmit)}
               >
               登録
             </Button>
