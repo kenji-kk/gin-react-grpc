@@ -2,6 +2,9 @@ import { useState, useContext, memo } from 'react';
 import { makeStyles } from '@mui/styles';
 import { AuthContext } from '../../App';
 import client from '../../api/client';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -16,6 +19,24 @@ interface Props {
   setDialogIsOpen: (value: boolean) => void;
   setTodos: any
 }
+
+interface FormInputType {
+  title: string
+  content: string
+}
+
+const schema = yup.object({
+  title: yup
+    .string()
+    .required('必須項目です')
+    .min(1,"1文字以上で入力してください")
+    .max(50,"50文字以下で入力してください"),
+  content: yup
+    .string()
+    .required('必須項目です')
+    .min(1,"1文字以上で入力してください")
+    .max(50,"50文字以下で入力してください")
+})
 
 const useStyles = makeStyles({
   dummy: {
@@ -33,12 +54,19 @@ export const AddTaskDialog:React.VFC<Props> = memo(({dialogIsOpen, setDialogIsOp
 
   const authContext = useContext(AuthContext);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInputType>({
+    resolver: yupResolver(schema),
+  })
 
   const handleClose = () => {
     setDialogIsOpen(false);
   };
 
-  const handleSubmit = async () => {
+  const onSubmit: SubmitHandler<FormInputType> = async () => {
     client.
     post('todos',
     {Title: title, Content: content},
@@ -67,10 +95,13 @@ export const AddTaskDialog:React.VFC<Props> = memo(({dialogIsOpen, setDialogIsOp
             <TextField
               autoFocus
               margin="dense"
-              id="name"
+              id="title"
               label="タスク名"
               type="text"
               fullWidth
+              {...register('title')}
+              error={"title" in errors}
+              helperText={errors.title?.message}
               variant="standard"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
@@ -84,6 +115,9 @@ export const AddTaskDialog:React.VFC<Props> = memo(({dialogIsOpen, setDialogIsOp
               label="タスク内容"
               type="text"
               fullWidth
+              {...register('content')}
+              error={"content" in errors}
+              helperText={errors.title?.message}
               multiline
               rows={4}
               variant="standard"
@@ -93,7 +127,7 @@ export const AddTaskDialog:React.VFC<Props> = memo(({dialogIsOpen, setDialogIsOp
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>閉じる</Button>
-            <Button onClick={handleSubmit}>作成</Button>
+            <Button onClick={handleSubmit(onSubmit)}>作成</Button>
           </DialogActions>
         </Dialog>
     </div>

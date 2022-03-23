@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../../App"
 import Cookies from 'js-cookie';
 import client from '../../api/client';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -19,18 +22,45 @@ interface PROPS {
   setFormToggle: (value: boolean) => void;
 }
 
+interface FormInputType {
+  email: string
+  password: string
+}
+
+const schema = yup.object({
+  email: yup
+    .string()
+    .required('必須項目です')
+    .email('正しいメールアドレス入力してね')
+    .min(5,"5文字以上で入力してください")
+    .max(100,"100文字以下で入力してください"),
+  password: yup
+    .string()
+    .required('必須項目です')
+    .min(7,"7文字以上で入力してください")
+    .max(32,"30文字以下で入力してください")
+})
+
 const theme = createTheme();
 
 export const SignInForms: React.VFC<PROPS> = memo(({setFormToggle}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const { setIsSignedIn, setCurrentUser, setJwt, jwt } = useContext(AuthContext)
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInputType>({
+    resolver: yupResolver(schema),
+  })
+
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const onSubmit: SubmitHandler<FormInputType> = async () => {
     client
     .post('signin',
     {Email: email, Password: password},
@@ -40,10 +70,15 @@ export const SignInForms: React.VFC<PROPS> = memo(({setFormToggle}) => {
       console.log('response body:', response.data)
       setIsSignedIn(true)
       setJwt(response.data.jwt)
+      setError('')
       console.log('jwtがセットされました:', jwt)
       Cookies.set("_access_token", response.data.jwt)
       navigate('/')}
     )
+    .catch(error => {
+      console.log('error:', error)
+      setError(`${error}`)
+    })
   };
 
   return (
@@ -64,14 +99,17 @@ export const SignInForms: React.VFC<PROPS> = memo(({setFormToggle}) => {
           <Typography component="h1" variant="h5">
             ログイン
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          {error && <Typography variant="body2" color="error.main">{error}</Typography>}
+          <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
               fullWidth
               id="email"
               label="メールアドレス"
-              name="email"
+              {...register('email')}
+              error={"email" in errors}
+              helperText={errors.email?.message}
               autoComplete="email"
               autoFocus
               value={email}
@@ -81,7 +119,9 @@ export const SignInForms: React.VFC<PROPS> = memo(({setFormToggle}) => {
               margin="normal"
               required
               fullWidth
-              name="password"
+              {...register('password')}
+              error={"password" in errors}
+              helperText={errors.password?.message}
               label="パスワード"
               type="password"
               id="password"
@@ -94,6 +134,7 @@ export const SignInForms: React.VFC<PROPS> = memo(({setFormToggle}) => {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleSubmit(onSubmit)}
             >
               ログイン
             </Button>
