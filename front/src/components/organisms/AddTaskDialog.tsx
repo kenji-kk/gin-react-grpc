@@ -78,7 +78,7 @@ export const AddTaskDialog:React.VFC<Props> = memo(({dialogIsOpen, setDialogIsOp
     )
     .then(response => {
       console.log('response body:', response.data.data)
-      setTodos((prevTodos:any) => [...prevTodos, response.data.data])
+      setTodos((prevTodos:any) => [response.data.data, ...prevTodos])
       handleClose()
       setTitle("")
       setContent("")
