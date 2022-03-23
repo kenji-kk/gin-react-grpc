@@ -1,7 +1,7 @@
 import { useState, useContext, memo } from 'react';
 import { makeStyles } from '@mui/styles';
-import axios from 'axios';
 import { AuthContext } from '../../App';
+import client from '../../api/client';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -39,8 +39,8 @@ export const AddTaskDialog:React.VFC<Props> = memo(({dialogIsOpen, setDialogIsOp
   };
 
   const handleSubmit = async () => {
-    axios.
-    post('http://localhost:8080/todos',
+    client.
+    post('todos',
     {Title: title, Content: content},
     { headers: {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + authContext.jwt

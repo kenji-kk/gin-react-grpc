@@ -1,8 +1,8 @@
 import { useState, useContext, memo }from 'react';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../../App"
 import Cookies from 'js-cookie';
+import client from '../../api/client';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -31,8 +31,8 @@ export const SignInForms: React.VFC<PROPS> = memo(({setFormToggle}) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    axios
-    .post('http://localhost:8080/signin',
+    client
+    .post('signin',
     {Email: email, Password: password},
     { headers: {'Content-Type': 'application/json'}, responseType: 'json' }
     )

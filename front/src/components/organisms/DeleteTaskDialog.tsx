@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useContext, memo } from 'react';
-import axios from 'axios';
 import { AuthContext } from '../../App';
+import client from '../../api/client';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -43,8 +43,8 @@ export const DeleteTaskDialog:React.VFC<Props> = memo(({setDialogIsOpen, dialogI
 
   const handleSubmit = async () => {
     console.log('todoId:', todoId)
-    axios.
-    delete(`http://localhost:8080/todos/${todoId}`,
+    client.
+    delete(`todos/${todoId}`,
     { headers: {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + authContext.jwt
                 }, 

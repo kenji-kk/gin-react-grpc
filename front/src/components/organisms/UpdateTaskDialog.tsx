@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect, memo } from 'react';
 import { makeStyles } from '@mui/styles';
-import axios from 'axios';
 import { AuthContext } from '../../App';
+import client from '../../api/client';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -50,8 +50,8 @@ export const UpdateTaskDialog:React.VFC<Props> = memo(({dialogIsOpen, setDialogI
 
   const handleSubmit = async () => {
     console.log('todoId:', todoId)
-    axios.
-    put(`http://localhost:8080/todos/${todoId}`,
+    client.
+    put(`todos/${todoId}`,
     {Id: Number(todoId), Title: title, Content: content},
     { headers: {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + authContext.jwt

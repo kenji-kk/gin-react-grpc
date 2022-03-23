@@ -1,7 +1,6 @@
 import './App.css';
 import { useState, useEffect, createContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom"
-import axios from 'axios';
 import Cookies from 'js-cookie';
 import { AuthPage } from './components/pages/AuthPage';
 import { Home } from './components/pages/Home';

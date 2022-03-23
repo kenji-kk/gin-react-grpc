@@ -6,12 +6,12 @@ import { Container } from '@mui/material';
 import { AuthContext } from '../../App';
 import { AddTaskButton } from '../atoms/AddTaskButton';
 import { AddTaskDialog } from '../organisms/AddTaskDialog';
-import axios from 'axios';
 import { UpdateTaskButton } from '../atoms/UpdateTaskButton';
 import { UpdateTaskDialog } from '../organisms/UpdateTaskDialog';
 import { DeleteTaskButton } from '../atoms/DeleteTaskButton';
 import { DeleteTaskDialog } from '../organisms/DeleteTaskDialog';
 import { SignoutButton } from '../atoms/SignoutButton';
+import client from '../../api/client';
 
 const useStyles = makeStyles({
   title: {
@@ -71,8 +71,8 @@ export const Home:React.VFC = memo(() => {
   const authContext = useContext(AuthContext);
   
   const fetchTodos = async () => {
-    axios
-    .get('http://localhost:8080/todos',
+    client
+    .get('todos',
     { headers: {'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + authContext.jwt
                 }, 

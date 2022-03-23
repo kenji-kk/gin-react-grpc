@@ -2,6 +2,7 @@ import { useState, useContext, memo }from 'react';
 import { AuthContext } from "../../App"
 import { useNavigate } from "react-router-dom"
 import Cookies from 'js-cookie';
+import client from '../../api/client';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -14,7 +15,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import axios from 'axios';
 
 interface PROPS {
   setFormToggle: (value: boolean) => void;
@@ -33,8 +33,8 @@ export const SignUpForms:React.VFC<PROPS> = memo(({setFormToggle}) =>{
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    axios
-    .post('http://localhost:8080/signup',
+    client
+    .post('signup',
     {UserName: name, Email: email, Password: password},
     { headers: {'Content-Type': 'application/json'}, responseType: 'json' }
     )
