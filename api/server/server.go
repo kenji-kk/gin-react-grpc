@@ -169,7 +169,19 @@ func (s *server) DeleteTodo(ctx context.Context, req *pb.DeleteTodoRequest) (*pb
 	todo := db.Todo{
 		Id: req.TodoId,
 	}
-	err := todo.DeleteTodo()
+	comTodo, err:= db.FetchTodo(todo.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Printf("comTodo.UserId: %v\n", comTodo.UserId)
+	fmt.Printf("req.UserId: %v\n", req.UserId)
+
+	if comTodo.UserId != req.UserId {
+		return nil, fmt.Errorf("権限がありません")
+	}
+
+	err = todo.DeleteTodo()
 	if err != nil {
 		return nil, err
 	}
