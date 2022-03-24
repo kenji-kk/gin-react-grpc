@@ -90,6 +90,7 @@ message UpdateTodoResponse {
 //DeleteTodo
 message DeleteTodoRequest {
   int64 todoId = 1;
+  int64 userId = 2;
 }
 
 message DeleteTodoResponse {}
