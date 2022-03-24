@@ -65,3 +65,14 @@ func (t *Todo) DeleteTodo() error {
 	}
 	return nil
 }
+
+func FetchTodo(id int64) (*Todo, error) {
+  cmd := `select id, title, content, user_id from todos where id = ?`
+  todo := &Todo{}
+	err := Db.QueryRow(cmd, id).Scan(&todo.Id, &todo.Title, &todo.Content, &todo.UserId)
+	if err != nil {
+		fmt.Printf("Todo取得時にエラーが起きました: %v\n", err)
+		return nil, err
+	}
+	return todo, nil
+}

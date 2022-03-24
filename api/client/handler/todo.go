@@ -103,7 +103,13 @@ func UpdateTodo(ctx *gin.Context) {
 		Content: todo.Content,
 	}
 
-	receiveTodo, err := c.UpdateTodo(context.Background(), &pb.UpdateTodoRequest{Todo: pTodo})
+	user, err := jwt.CurrentUser(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	receiveTodo, err := c.UpdateTodo(context.Background(), &pb.UpdateTodoRequest{Todo: pTodo, UserId: user.Id})
 	if err != nil {
 		fmt.Printf("UpdateTodoハンドラでエラーがありました: %v\n", err)
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
