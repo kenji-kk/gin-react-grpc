@@ -4,7 +4,7 @@ docker-composeを使用し、React,Go(Gin),gRPC,Nginx,MySQLの環境を構築し
 ## 構築コマンド
 1. `git clone git@github.com:kenji-kk/gin-react-grpc-todo`
 2. `cd gin-react-grpc-todo`
-3. `touch ./front//.env`
+3. `touch ./front/.env`
 4. `echo REACT_APP_HOST="http://localhost" > ./front/.env"`
 5. `docker-compose up`
 ＊一回で立ち上がらなかったらもう一度３を繰り返す
