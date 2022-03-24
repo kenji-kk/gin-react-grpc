@@ -80,6 +80,7 @@ message GetTodosResponse {
 //UpdateTodo
 message UpdateTodoRequest {
   Todo todo = 1;
+  int64 userId = 2;
 }
 
 message UpdateTodoResponse {
