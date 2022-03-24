@@ -137,8 +137,13 @@ func DeleteTodo(ctx *gin.Context) {
     return
   }
 
+	user, err := jwt.CurrentUser(ctx)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-	_, err = c.DeleteTodo(context.Background(), &pb.DeleteTodoRequest{TodoId: int64(id)})
+	_, err = c.DeleteTodo(context.Background(), &pb.DeleteTodoRequest{TodoId: int64(id), UserId: user.Id})
 	if err != nil {
 		fmt.Printf("DeleteTodoハンドラでエラーがありました: %v\n", err)
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"err": err.Error()})
