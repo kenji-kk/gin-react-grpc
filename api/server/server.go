@@ -145,7 +145,15 @@ func (s *server) UpdateTodo(ctx context.Context, req *pb.UpdateTodoRequest) (*pb
 		Title: req.Todo.Title,
 		Content: req.Todo.Content,
 	}
-	err := todo.UpdateTodo()
+	comTodo, err:= db.FetchTodo(todo.Id)
+	if err != nil {
+		return nil, err
+	}
+	
+	if comTodo.UserId != req.UserId {
+		return nil, fmt.Errorf("権限がありません")
+	}
+	err = todo.UpdateTodo()
 	if err != nil {
 		return nil, err
 	}
