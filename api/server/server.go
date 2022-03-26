@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net"
@@ -10,6 +9,7 @@ import (
 
 	"todo/pb"
 	"todo/server/db"
+	"todo/server/function"
 
 	"google.golang.org/grpc"
 )
@@ -25,7 +25,6 @@ func init() {
 	db.DbConnect()
 }
 
-type server struct {}
 
 func main() {
 	fmt.Println("起動")
@@ -34,7 +33,7 @@ func main() {
 	checkErr("Failed to listen: %v", err)
 
 	s := grpc.NewServer()
-	pb.RegisterTodoServiceServer(s, &server{})
+	pb.RegisterTodoServiceServer(s, &function.Server{})
 	s.Serve(lis)
 
 	ch := make(chan os.Signal, 1)
@@ -47,143 +46,5 @@ func main() {
 	fmt.Println("終了")
 }
 
-func (s *server) AddUser(ctx context.Context, req *pb.AddUserRequest ) (*pb.AddUserResponse, error) {
-	user := db.User{
-		UserName: req.UserName,
-		Email: req.Email,
-		Password: req.Password,
-	}
-	user2, err := user.AddUser()
-	if err != nil {
-		return nil, err
-	}
-	return &pb.AddUserResponse{
-		Id : user2.Id,
-		UserName: user2.UserName,
-		Email: user2.Email,
-	}, err
 
-}
 
-func (s *server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (*pb.LoginUserResponse, error) {
-	user := db.User{
-		Email: req.Email,
-		Password: req.Password,
-	}
-	user2, err := user.LoginUser()
-	if err != nil {
-		fmt.Printf("LoginUserServerでエラーがありました: %v\n", err)
-		return nil, err
-	}
-
-	return &pb.LoginUserResponse{
-		Id : user2.Id,
-		UserName: user2.UserName,
-		Email: user2.Email,
-	}, err
-}
-
-func (s *server) GetUserById(ctx context.Context, req *pb.GetUserByIdRequest) (*pb.GetUserByIdResponse, error) {
-	user := db.User{
-		Id: req.Id,
-	}
-	user2, err := user.GetUserById()
-	if err != nil {
-		return nil, err
-	}
-	return &pb.GetUserByIdResponse{
-		Id : user2.Id,
-		UserName: user2.UserName,
-		Email: user2.Email,
-	}, err
-}
-
-func (s *server) CreateTodo(ctx context.Context, req *pb.CreateTodoRequest) (*pb.CreateTodoResponse, error) {
-	todo := db.Todo{
-		Title: req.Todo.Title,
-		Content: req.Todo.Content,
-		UserId: req.User.Id,
-	}
-
-	id, err := todo.CreateTodo()
-	if err != nil {
-		return nil, err
-	}
-	returnTodo := &pb.Todo{
-		Id: id,
-		Title: todo.Title,
-		Content: todo.Content,
-	}
-
-	return &pb.CreateTodoResponse{Todo: returnTodo}, nil
-
-}
-
-func (s *server) GetTodos(ctx context.Context, req *pb.GetTodosRequest) (*pb.GetTodosResponse, error) {
-	userId := req.UserId
-	todos, err := db.GetTodos(userId)
-	if err != nil {
-		return nil, err
-	}
-
-	var pTodos []*pb.Todo
-	for _, todo := range todos {
-		pTodos = append(pTodos, &pb.Todo{
-			Id: todo.Id,
-			Title: todo.Title,
-			Content: todo.Content,
-		})
-	}
-	return &pb.GetTodosResponse{
-		Todos: pTodos,
-	}, nil
-}
-
-func (s *server) UpdateTodo(ctx context.Context, req *pb.UpdateTodoRequest) (*pb.UpdateTodoResponse, error) {
-	todo := db.Todo{
-		Id: req.Todo.Id,
-		Title: req.Todo.Title,
-		Content: req.Todo.Content,
-	}
-	comTodo, err:= db.FetchTodo(todo.Id)
-	if err != nil {
-		return nil, err
-	}
-	
-	if comTodo.UserId != req.UserId {
-		return nil, fmt.Errorf("権限がありません")
-	}
-	err = todo.UpdateTodo()
-	if err != nil {
-		return nil, err
-	}
-	returnTodo := &pb.Todo{
-		Id: todo.Id,
-		Title: todo.Title,
-		Content: todo.Content,
-	}
-	return &pb.UpdateTodoResponse{Todo: returnTodo}, nil
-}
-
-func (s *server) DeleteTodo(ctx context.Context, req *pb.DeleteTodoRequest) (*pb.DeleteTodoResponse, error) {
-	todo := db.Todo{
-		Id: req.TodoId,
-	}
-	comTodo, err:= db.FetchTodo(todo.Id)
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Printf("comTodo.UserId: %v\n", comTodo.UserId)
-	fmt.Printf("req.UserId: %v\n", req.UserId)
-
-	if comTodo.UserId != req.UserId {
-		return nil, fmt.Errorf("権限がありません")
-	}
-
-	err = todo.DeleteTodo()
-	if err != nil {
-		return nil, err
-	}
-	return &pb.DeleteTodoResponse{}, nil
-}
